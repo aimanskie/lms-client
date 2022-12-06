@@ -5,7 +5,6 @@ import { SyncOutlined } from '@ant-design/icons'
 import Link from 'next/link'
 import { Context } from '../context'
 import { useRouter } from 'next/router'
-import user from '../../server/models/user'
 
 const Register = () => {
   const [name, setName] = useState('Aiman')
