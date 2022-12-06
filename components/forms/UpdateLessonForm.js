@@ -52,7 +52,7 @@ const UpdateLessonForm = ({
             className='float-right mt-2'
             disabled={uploading}
             checked={current.free_preview}
-            name='fee_preview'
+            name='free_preview'
             onChange={(v) => setCurrent({ ...current, free_preview: v })}
           />
         </div>

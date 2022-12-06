@@ -24,11 +24,11 @@ const CourseEdit = () => {
   })
   const [image, setImage] = useState({})
   const [preview, setPreview] = useState('')
-  const [uploadButtonText, setUploadButtonText] = useState('Upload Image')
+  const [uploadButtonText, setUploadButtonText] = useState('Upload Image (5MB Max Size)')
 
   const [visible, setVisible] = useState(false)
   const [current, setCurrent] = useState({})
-  const [uploadVideoButtonText, setUploadVideoButtonText] = useState('Upload Video')
+  const [uploadVideoButtonText, setUploadVideoButtonText] = useState('Upload Video (Format MP4, 200MB Max Size)')
   const [progress, setProgress] = useState(0)
   const [uploading, setUploading] = useState(false)
 
@@ -95,6 +95,9 @@ const CourseEdit = () => {
         image,
       })
       toast('Course updated!')
+      setTimeout(() => {
+        router.back()
+      }, 2000)
     } catch (err) {
       toast(err.response.data)
     }

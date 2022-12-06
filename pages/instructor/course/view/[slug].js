@@ -161,8 +161,8 @@ const CourseView = () => {
                       />
                     </Tooltip>
 
-                    {course.lessons && course.lessons.length < 5 ? (
-                      <Tooltip title='Min 5 lessons required to publish'>
+                    {course.lessons && course.lessons.length < 2 ? (
+                      <Tooltip title='Min 2 lessons required to publish'>
                         <QuestionOutlined className='h5 pointer text-danger' />
                       </Tooltip>
                     ) : course.published ? (
