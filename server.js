@@ -10,7 +10,6 @@ app
   .prepare()
   .then(() => {
     const server = express()
-    // apply proxy in dev mode
     if (dev) {
       server.use(
         '/api',

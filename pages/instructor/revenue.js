@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from 'react'
-import { Context } from '../../context'
 import InstructorRoute from '../../components/routes/InstructorRoute.js'
 import axios from 'axios'
 import { DollarOutlined, SettingOutlined, SyncOutlined } from '@ant-design/icons'
@@ -40,7 +39,6 @@ const InstructorRevenue = () => {
             </h2>
             <small>You get paid directly from stripe to your bank account every 48 hour</small>
             <hr />
-            {/* {JSON.stringify(balance, null, 4)} */}
             <h4>
               Pending balance
               {balance.pending &&

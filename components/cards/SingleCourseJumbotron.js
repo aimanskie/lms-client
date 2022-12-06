@@ -1,6 +1,5 @@
-import SingleCourse from '../../pages/course/[slug]'
-import { currencyFormatter } from '../../utils/helpers'
-import { Badge, Modal, Button } from 'antd'
+import { currencyFormatter } from '../../utils/helpers.js'
+import { Badge, Button } from 'antd'
 import ReactPlayer from 'react-player'
 import { LoadingOutlined, SafetyOutlined } from '@ant-design/icons'
 
@@ -8,16 +7,13 @@ const SingleCourseJumbotron = ({
   course,
   showModal,
   setShowModal,
-  preview,
   setPreview,
   loading,
   user,
   handlePaidEnrollment,
   handleFreeEnrollment,
   enrolled,
-  setEnrolled,
 }) => {
-  // destructure
   const { name, description, instructor, updatedAt, lessons, image, price, paid, category } = course
 
   return (
@@ -39,7 +35,7 @@ const SingleCourseJumbotron = ({
             {paid
               ? currencyFormatter({
                   amount: price,
-                  currency: 'usd',
+                  currency: 'myr',
                 })
               : 'Free'}
           </h4>
@@ -67,7 +63,7 @@ const SingleCourseJumbotron = ({
               <img src={image && image.Location} alt={name} className='img img-fluid' />
             </>
           )}
-          {/* enroll button */}
+
           {loading ? (
             <div className='d-flex justify-content-center mt-3'>
               <LoadingOutlined className='h1 text-danger' />

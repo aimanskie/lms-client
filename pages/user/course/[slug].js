@@ -18,13 +18,10 @@ const { Item } = Menu
 const SingleCourse = () => {
   const [clicked, setClicked] = useState(-1)
   const [collapsed, setCollapsed] = useState(false)
-  const [loading, setLoading] = useState(false)
   const [course, setCourse] = useState({ lessons: [] })
   const [completedLessons, setCompletedLessons] = useState([])
-  // force state update
   const [updateState, setUpdateState] = useState(false)
 
-  // router
   const router = useRouter()
   const { slug } = router.query
 

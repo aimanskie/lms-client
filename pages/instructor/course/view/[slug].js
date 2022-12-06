@@ -18,7 +18,6 @@ import Item from 'antd/lib/list/Item'
 
 const CourseView = () => {
   const [course, setCourse] = useState({})
-  // for lessons
   const [visible, setVisible] = useState(false)
   const [values, setValues] = useState({
     title: '',
@@ -28,7 +27,6 @@ const CourseView = () => {
   const [uploading, setUploading] = useState(false)
   const [uploadButtonText, setUploadButtonText] = useState('Upload Video')
   const [progress, setProgress] = useState(0)
-  // student count
   const [students, setStudents] = useState(0)
 
   const router = useRouter()
@@ -55,13 +53,10 @@ const CourseView = () => {
     setStudents(data.length)
   }
 
-  // FUNCTIONS FOR ADD LESSON
   const handleAddLesson = async (e) => {
     e.preventDefault()
-    // console.log(values);
     try {
       const { data } = await axios.post(`/api/course/lesson/${slug}/${course.instructor._id}`, values)
-      // console.log(data)
       setValues({ ...values, title: '', content: '', video: {} })
       setProgress(0)
       setUploadButtonText('Upload video')
@@ -82,13 +77,11 @@ const CourseView = () => {
 
       const videoData = new FormData()
       videoData.append('video', file)
-      // save progress bar and send video as form data to backend
       const { data } = await axios.post(`/api/course/video-upload/${course.instructor._id}`, videoData, {
         onUploadProgress: (e) => {
           setProgress(Math.round((100 * e.loaded) / e.total))
         },
       })
-      // once response is received
       console.log(data)
       setValues({ ...values, video: data })
       setUploading(false)
@@ -143,7 +136,6 @@ const CourseView = () => {
   return (
     <InstructorRoute>
       <div className='contianer-fluid pt-3'>
-        {/* <pre>{JSON.stringify(course, null, 4)}</pre> */}
         {course && (
           <div className='container-fluid pt-1'>
             <div className='media pt-2'>

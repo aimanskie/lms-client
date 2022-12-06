@@ -9,12 +9,10 @@ import { toast } from 'react-toastify'
 import { loadStripe } from '@stripe/stripe-js'
 
 const SingleCourse = ({ course }) => {
-  // state
   const [showModal, setShowModal] = useState(false)
   const [preview, setPreview] = useState('')
   const [loading, setLoading] = useState(false)
   const [enrolled, setEnrolled] = useState({})
-  // context
   const {
     state: { user },
   } = useContext(Context)
@@ -33,12 +31,9 @@ const SingleCourse = ({ course }) => {
   const { slug } = router.query
 
   const handlePaidEnrollment = async () => {
-    // console.log("handle paid enrollment");
     try {
       setLoading(true)
-      // check if user is logged in
       if (!user) router.push('/login')
-      // check if already enrolled
       if (enrolled.status) return router.push(`/user/course/${enrolled.course.slug}`)
       const { data } = await axios.post(`/api/paid-enrollment/${course._id}`)
       const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY)
@@ -51,12 +46,9 @@ const SingleCourse = ({ course }) => {
   }
 
   const handleFreeEnrollment = async (e) => {
-    // console.log("handle free enrollment");
     e.preventDefault()
     try {
-      // check if user is logged in
       if (!user) router.push('/login')
-      // check if already enrolled
       if (enrolled.status) return router.push(`/user/course/${enrolled.course.slug}`)
       setLoading(true)
       const { data } = await axios.post(`/api/free-enrollment/${course._id}`)
@@ -72,7 +64,6 @@ const SingleCourse = ({ course }) => {
 
   return (
     <>
-      {/* <pre>{JSON.stringify(course, null, 4)}</pre> */}
       <SingleCourseJumbotron
         course={course}
         showModal={showModal}

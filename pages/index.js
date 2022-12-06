@@ -1,18 +1,7 @@
-import { useState, useEffect } from 'react'
 import axios from 'axios'
 import CourseCard from '../components/cards/CourseCard.js'
 
 const Index = ({ courses }) => {
-  // const [courses, setCourses] = useState([]);
-
-  // useEffect(() => {
-  //   const fetchCourses = async () => {
-  //     const { data } = await axios.get("/api/courses");
-  //     setCourses(data);
-  //   };
-  //   fetchCourses();
-  // }, []);
-
   return (
     <>
       <h1 className='jumbotron text-center bg-primary square'>Online Education Marketplace</h1>

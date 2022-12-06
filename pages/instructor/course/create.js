@@ -7,7 +7,6 @@ import { toast } from 'react-toastify'
 import { useRouter } from 'next/router'
 
 const CourseCreate = () => {
-  // state
   const [values, setValues] = useState({
     name: '',
     description: '',
@@ -20,8 +19,6 @@ const CourseCreate = () => {
   const [image, setImage] = useState({})
   const [preview, setPreview] = useState('')
   const [uploadButtonText, setUploadButtonText] = useState('Upload Image')
-
-  // router
   const router = useRouter()
 
   const handleChange = (e) => {
@@ -40,7 +37,6 @@ const CourseCreate = () => {
           image: uri,
         })
         console.log('IMAGE UPLOADED', data)
-        // set image in the state
         setImage(data)
         setValues({ ...values, loading: false })
       } catch (err) {
@@ -53,7 +49,6 @@ const CourseCreate = () => {
 
   const handleImageRemove = async () => {
     try {
-      // console.log(values);
       setValues({ ...values, loading: true })
       const res = await axios.post('/api/course/remove-image', { image })
       setImage({})
@@ -70,7 +65,6 @@ const CourseCreate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      // console.log(values);
       const { data } = await axios.post('/api/course', {
         ...values,
         image,
@@ -97,9 +91,7 @@ const CourseCreate = () => {
           handleImageRemove={handleImageRemove}
         />
       </div>
-      <pre>{JSON.stringify(values, null, 4)}</pre>
       <hr />
-      <pre>{JSON.stringify(image, null, 4)}</pre>
     </InstructorRoute>
   )
 }

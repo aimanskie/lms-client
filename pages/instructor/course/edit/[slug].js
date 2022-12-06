@@ -12,7 +12,6 @@ import UpdateLessonForm from '../../../../components/forms/UpdateLessonForm.js'
 const { Item } = List
 
 const CourseEdit = () => {
-  // state
   const [values, setValues] = useState({
     name: '',
     description: '',
@@ -27,14 +26,12 @@ const CourseEdit = () => {
   const [preview, setPreview] = useState('')
   const [uploadButtonText, setUploadButtonText] = useState('Upload Image')
 
-  // state for lessons update
   const [visible, setVisible] = useState(false)
   const [current, setCurrent] = useState({})
   const [uploadVideoButtonText, setUploadVideoButtonText] = useState('Upload Video')
   const [progress, setProgress] = useState(0)
   const [uploading, setUploading] = useState(false)
 
-  // router
   const router = useRouter()
   const { slug } = router.query
 
@@ -58,14 +55,13 @@ const CourseEdit = () => {
     setPreview(window.URL.createObjectURL(file))
     setUploadButtonText(file.name)
     setValues({ ...values, loading: true })
-    // resize
+
     Resizer.imageFileResizer(file, 720, 500, 'JPEG', 100, 0, async (uri) => {
       try {
         let { data } = await axios.post('/api/course/upload-image', {
           image: uri,
         })
         console.log('IMAGE UPLOADED', data)
-        // set image in the state
         setImage(data)
         setValues({ ...values, loading: false })
       } catch (err) {
@@ -78,7 +74,6 @@ const CourseEdit = () => {
 
   const handleImageRemove = async () => {
     try {
-      // console.log(values);
       setValues({ ...values, loading: true })
       const res = await axios.post('/api/course/remove-image', { image })
       setImage({})
@@ -95,41 +90,34 @@ const CourseEdit = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      // console.log(values);
       const { data } = await axios.put(`/api/course/${slug}`, {
         ...values,
         image,
       })
       toast('Course updated!')
-      // router.push("/instructor");
     } catch (err) {
       toast(err.response.data)
     }
   }
 
   const handleDrag = (e, index) => {
-    // console.log("ON DRAG => ", index);
     e.dataTransfer.setData('itemIndex', index)
   }
 
   const handleDrop = async (e, index) => {
-    // console.log("ON DROP => ", index);
-
     const movingItemIndex = e.dataTransfer.getData('itemIndex')
     const targetItemIndex = index
     let allLessons = values.lessons
 
-    let movingItem = allLessons[movingItemIndex] // clicked/dragged item to re-order
-    allLessons.splice(movingItemIndex, 1) // remove 1 item from the given index
-    allLessons.splice(targetItemIndex, 0, movingItem) // push item after target item index
+    let movingItem = allLessons[movingItemIndex]
+    allLessons.splice(movingItemIndex, 1)
+    allLessons.splice(targetItemIndex, 0, movingItem)
 
     setValues({ ...values, lessons: [...allLessons] })
-    // save the new lessons order in db
     const { data } = await axios.put(`/api/course/${slug}`, {
       ...values,
       image,
     })
-    // console.log("LESSONS REARRANGED RES => ", data);
     toast('Lessons rearranged successfully')
   }
 
@@ -138,9 +126,7 @@ const CourseEdit = () => {
     if (!answer) return
     let allLessons = values.lessons
     const removed = allLessons.splice(index, 1)
-    // console.log("removed", removed[0]._id);
     setValues({ ...values, lessons: allLessons })
-    // send request to server
     const { data } = await axios.put(`/api/course/${slug}/${removed[0]._id}`)
     console.log('LESSON DELETED =>', data)
   }
@@ -173,7 +159,6 @@ const CourseEdit = () => {
   }
 
   const handleUpdateLesson = async (e) => {
-    // console.log("handle update lesson");
     e.preventDefault()
     const { data } = await axios.put(`/api/course/lesson/${slug}/${current._id}`, current)
     setUploadVideoButtonText('Upload Video')
@@ -191,7 +176,6 @@ const CourseEdit = () => {
   return (
     <InstructorRoute>
       <h1 className='jumbotron text-center square'>Update Course</h1>
-      {/* {JSON.stringify(values)} */}
       <div className='pt-3 pb-3'>
         <CourseCreateForm
           handleSubmit={handleSubmit}
@@ -205,12 +189,7 @@ const CourseEdit = () => {
           editPage={true}
         />
       </div>
-      {/* <pre>{JSON.stringify(values, null, 4)}</pre>
       <hr />
-      <pre>{JSON.stringify(image, null, 4)}</pre> */}
-
-      <hr />
-
       <div className='row pb-5'>
         <div className='col lesson-list'>
           <h4>{values && values.lessons && values.lessons.length} Lessons</h4>
@@ -246,7 +225,6 @@ const CourseEdit = () => {
           progress={progress}
           uploading={uploading}
         />
-        {/* <pre>{JSON.stringify(current, null, 4)}</pre> */}
       </Modal>
     </InstructorRoute>
   )

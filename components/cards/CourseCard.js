@@ -1,11 +1,11 @@
-import { Card, Badge } from "antd";
-import Link from "next/link";
-import { currencyFormatter } from "../../utils/helpers";
+import { Card, Badge } from 'antd'
+import Link from 'next/link'
+import { currencyFormatter } from '../../utils/helpers'
 
-const { Meta } = Card;
+const { Meta } = Card
 
 const CourseCard = ({ course }) => {
-  const { name, instructor, price, image, slug, paid, category } = course;
+  const { name, instructor, price, image, slug, paid, category } = course
   return (
     <Link href={`/course/${slug}`}>
       <a>
@@ -27,7 +27,7 @@ const CourseCard = ({ course }) => {
             {paid
               ? currencyFormatter({
                   amount: price,
-                  currency: 'usd',
+                  currency: 'myr',
                 })
               : 'Free'}
           </h4>
@@ -35,6 +35,6 @@ const CourseCard = ({ course }) => {
       </a>
     </Link>
   )
-};
+}
 
-export default CourseCard;
+export default CourseCard

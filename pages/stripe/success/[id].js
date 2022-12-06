@@ -5,7 +5,6 @@ import { useRouter } from 'next/router'
 import axios from 'axios'
 
 const StripeSuccess = () => {
-  // router
   const router = useRouter()
   const { id } = router.query
 
@@ -17,7 +16,6 @@ const StripeSuccess = () => {
 
   const successRequest = async () => {
     const { data } = await axios.get(`/api/stripe-success/${id}`)
-    // console.log("SUCCESS REQ DATA", data);
     router.push(`/user/course/${data.course.slug}`)
   }
 

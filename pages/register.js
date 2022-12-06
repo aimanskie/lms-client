@@ -24,7 +24,6 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    // console.table({ name, email, password });
     try {
       setLoading(true)
       const { data } = await axios.post(`/api/register`, {
@@ -32,7 +31,6 @@ const Register = () => {
         email,
         password,
       })
-      // console.log("REGISTER RESPONSE", data);
       toast('Registration successful. Please login.')
       setName('')
       setEmail('')
