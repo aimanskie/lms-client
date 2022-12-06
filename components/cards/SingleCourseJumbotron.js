@@ -29,7 +29,7 @@ const SingleCourseJumbotron = ({
           {/* author */}
           <p>Created by {instructor.name}</p>
           {/* updated at */}
-          <p>Last udpated {new Date(updatedAt).toLocaleDateString()}</p>
+          <p>Last updated {new Date(updatedAt).toLocaleDateString()}</p>
           {/* price */}
           <h4 className='text-light'>
             {paid

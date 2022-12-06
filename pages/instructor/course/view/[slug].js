@@ -25,7 +25,7 @@ const CourseView = () => {
     video: {},
   })
   const [uploading, setUploading] = useState(false)
-  const [uploadButtonText, setUploadButtonText] = useState('Upload Video')
+  const [uploadButtonText, setUploadButtonText] = useState('Upload Video (Format MP4, 200MB Max Size)')
   const [progress, setProgress] = useState(0)
   const [students, setStudents] = useState(0)
 
