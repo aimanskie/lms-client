@@ -22,7 +22,7 @@ const TopNav = () => {
 
   const { state, dispatch } = useContext(Context)
   const { user } = state
-
+  console.log(user)
   const router = useRouter()
 
   useEffect(() => {
@@ -38,39 +38,58 @@ const TopNav = () => {
   }
 
   return (
-    <Menu theme='dark' mode='horizontal' selectedKeys={[current]} className='mb-2'>
+    <Menu theme='dark' mode='horizontal' selectedKeys={[current]} className='mb-2' style={{ dispay: 'block' }}>
       <Item key='/' onClick={(e) => setCurrent(e.key)} icon={<AppstoreOutlined />}>
         <Link href='/'>
           <a>LMS</a>
         </Link>
       </Item>
 
-      {user && user.role && user.role.includes('Admin') && (
+      {user && user.role && (user.role.includes('Admin') || user.role.includes('Instructor')) ? (
         <Item key='/instructor/course/create' onClick={(e) => setCurrent(e.key)} icon={<CarryOutOutlined />}>
           <Link href='/instructor/course/create'>
             <a>Create Course</a>
           </Link>
         </Item>
+      ) : (
+        user !== null && (
+          <Item key='/user/new-instructor' onClick={(e) => setCurrent(e.key)} icon={<TeamOutlined />}>
+            <Link href='/user/new-instructor'>
+              <a>Become Instructor</a>
+            </Link>
+          </Item>
+        )
       )}
 
       {user === null && (
         <>
-          <Item className='float-right' key='/register' onClick={(e) => setCurrent(e.key)} icon={<UserAddOutlined />}>
-            <Link href='/register'>
-              <a>Register</a>
-            </Link>
-          </Item>
-
-          <Item className='float-right' key='/login' onClick={(e) => setCurrent(e.key)} icon={<LoginOutlined />}>
+          <Item
+            className='text-end'
+            key='/login'
+            onClick={(e) => setCurrent(e.key)}
+            icon={<LoginOutlined />}
+            style={{ float: 'right' }}
+          >
             <Link href='/login'>
               <a>Login</a>
+            </Link>
+          </Item>
+          <Item
+            /* className='text-end' */
+            key='/register'
+            onClick={(e) => setCurrent(e.key)}
+            icon={<UserAddOutlined />}
+            style={{ float: 'right' }}
+          >
+            <Link href='/register'>
+              <a>Register</a>
             </Link>
           </Item>
         </>
       )}
 
       {user !== null && (
-        <SubMenu icon={<CoffeeOutlined />} title={user && user.name} className='float-right'>
+        <SubMenu icon={<CoffeeOutlined />} title={user && user.name} style={{ float: 'right' }}>
           <ItemGroup>
             <Item key='/user'>
               <Link href='/user'>
@@ -82,8 +101,8 @@ const TopNav = () => {
         </SubMenu>
       )}
 
-      {user && user.role && user.role.includes('Admin') && (
-        <Item key='/instructor' onClick={(e) => setCurrent(e.key)} icon={<TeamOutlined />} className='float-right'>
+      {user && user.role && (user.role.includes('Admin') || user.role.includes('Instructor')) && (
+        <Item key='/instructor' onClick={(e) => setCurrent(e.key)} icon={<TeamOutlined />} style={{ float: 'right' }}>
           <Link href='/instructor'>
             <a>Instructor</a>
           </Link>

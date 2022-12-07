@@ -6,7 +6,7 @@ import { Context } from '../context'
 import { useRouter } from 'next/router'
 
 const ForgotPassword = () => {
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState('testdev@assohwah.com')
   const [success, setSuccess] = useState(false)
   const [code, setCode] = useState('')
   const [newPassword, setNewPassword] = useState('')
@@ -50,6 +50,7 @@ const ForgotPassword = () => {
       setNewPassword('')
       setLoading(false)
       toast('Great! Now you can login with your new password')
+      router.push('/login')
     } catch (err) {
       setLoading(false)
       toast(err.response.data)

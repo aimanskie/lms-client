@@ -7,9 +7,9 @@ import { Context } from '../context'
 import { useRouter } from 'next/router'
 
 const Register = () => {
-  const [name, setName] = useState('Aiman')
-  const [email, setEmail] = useState('aiman@gmail.com')
-  const [password, setPassword] = useState('aiman123')
+  const [name, setName] = useState('Test')
+  const [email, setEmail] = useState('testdev@assohwah.com')
+  const [password, setPassword] = useState('test123')
   const [loading, setLoading] = useState(false)
 
   const {
@@ -31,11 +31,13 @@ const Register = () => {
         email,
         password,
       })
+      if (!data.ok) throw Error
       toast('Registration successful. Please login.')
       setName('')
       setEmail('')
       setPassword('')
       setLoading(false)
+      router.push('/login')
     } catch (err) {
       toast(err.response.data)
       setLoading(false)
