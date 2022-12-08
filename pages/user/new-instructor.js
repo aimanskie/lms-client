@@ -10,13 +10,11 @@ const newInstructor = () => {
 
   const {
     state: { user },
+    dispatch,
   } = useContext(Context)
 
   const router = useRouter()
   // console.log(user)
-  // useEffect(() => {
-  //   if (user !== null) router.push('/')
-  // }, [user])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -25,11 +23,15 @@ const newInstructor = () => {
         bankAccount,
         bank,
       })
+      dispatch({
+        type: 'LOGIN',
+        payload: data,
+      })
       console.log('REGISTER RESPONSE', data)
       toast('Registration Instructor successful')
       setBankAccount('')
       setBank('')
-      router.push('/user')
+      router.push('/instructor')
     } catch (err) {
       toast(err.response.data)
     }
