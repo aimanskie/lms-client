@@ -45,21 +45,22 @@ const TopNav = () => {
         </Link>
       </Item>
 
-      {user && user.role && (user.role.includes('Admin') || user.role.includes('Instructor')) ? (
+      {user && user.role && (user.role.includes('Admin') || user.role.includes('Instructor')) && (
         <Item key='/instructor/course/create' onClick={(e) => setCurrent(e.key)} icon={<CarryOutOutlined />}>
           <Link href='/instructor/course/create'>
             <a>Create Course</a>
           </Link>
         </Item>
-      ) : (
-        user !== null && (
-          <Item key='/user/new-instructor' onClick={(e) => setCurrent(e.key)} icon={<TeamOutlined />}>
-            <Link href='/user/new-instructor'>
-              <a>Become Instructor</a>
-            </Link>
-          </Item>
-        )
-      )}
+      )} 
+      {/* // : (
+      //   user !== null && (
+      //     <Item key='/user/new-instructor' onClick={(e) => setCurrent(e.key)} icon={<TeamOutlined />}>
+      //       <Link href='/user/new-instructor'>
+      //         <a>Become Instructor</a>
+      //       </Link>
+      //     </Item>
+      //   )
+      // )} */}
 
       {user === null && (
         <>
@@ -68,7 +69,7 @@ const TopNav = () => {
             key='/login'
             onClick={(e) => setCurrent(e.key)}
             icon={<LoginOutlined />}
-            style={{ justifyContent: 'flex-end' }}
+            style={{ float: 'right' }}
           >
             <Link href='/login'>
               <a>Login</a>
