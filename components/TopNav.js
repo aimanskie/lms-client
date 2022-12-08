@@ -68,7 +68,7 @@ const TopNav = () => {
             key='/login'
             onClick={(e) => setCurrent(e.key)}
             icon={<LoginOutlined />}
-            style={{ float: 'right' }}
+            style={{ justifyContent: 'flex-end' }}
           >
             <Link href='/login'>
               <a>Login</a>

@@ -13,6 +13,8 @@ const UserIndex = () => {
   const [courses, setCourses] = useState([])
   const [loading, setLoading] = useState(false)
 
+  console.log(user)
+  
   useEffect(() => {
     loadCourses()
   }, [])
