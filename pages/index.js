@@ -1,9 +1,14 @@
 import axios from 'axios'
 import CourseCard from '../components/cards/CourseCard.js'
+import Head from 'next/head'
 
 const Index = ({ courses }) => {
   return (
     <>
+      <Head>
+        <title>LMS</title>
+        <link rel='icon' href='/favicon.png' />
+      </Head>
       <h1 className='jumbotron text-center bg-primary square'>Online School</h1>
       <div className='container-fluid'>
         <div className='row'>

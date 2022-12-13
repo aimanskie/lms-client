@@ -74,8 +74,9 @@ const TopNav = () => {
             <a>Become Instructor</a>
           </Link>
         </Item>
-      ) : <Item></Item>
-    }
+      ) : (
+        <Item></Item>
+      )}
 
       {user === null && (
         <>
