@@ -45,9 +45,7 @@ const UserIndex = () => {
               <div className='row'>
                 <div className='col'>
                   <Link href={`/user/course/${course.slug}`} className='pointer'>
-                    <a>
-                      <h5 className='mt-2 text-primary'>{course.name}</h5>
-                    </a>
+                    <h5 className='mt-2 text-primary'>{course.name}</h5>
                   </Link>
                   <p style={{ marginTop: '-10px' }}>{course.lessons.length} lessons</p>
                   <p className='text-muted' style={{ marginTop: '-15px', fontSize: '12px' }}>
@@ -56,9 +54,7 @@ const UserIndex = () => {
                 </div>
                 <div className='col-md-3 mt-3 text-center'>
                   <Link href={`/user/course/${course.slug}`}>
-                    <a>
-                      <PlayCircleOutlined className='h2 pointer text-primary' />
-                    </a>
+                    <PlayCircleOutlined className='h2 pointer text-primary' />
                   </Link>
                 </div>
               </div>

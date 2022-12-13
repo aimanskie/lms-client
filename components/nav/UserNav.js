@@ -10,8 +10,8 @@ const UserNav = () => {
 
   return (
     <div className='nav flex-column nav-pills'>
-      <Link href='/user'>
-        <a className={`nav-link ${current === '/user' && 'active'}`}>Dashboard</a>
+      <Link href='/user' className={`nav-link ${current === '/user' && 'active'}`}>
+        Dashboard
       </Link>
     </div>
   )

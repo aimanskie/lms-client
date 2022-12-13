@@ -31,10 +31,8 @@ const InstructorIndex = () => {
               <div className='media-body pl-2'>
                 <div className='row'>
                   <div className='col'>
-                    <Link href={`/instructor/course/view/${course.slug}`} className='pointer'>
-                      <a className='mt-2 text-primary'>
+                    <Link href={`/instructor/course/view/${course.slug}`} className='pointer mt-2 text-primary'>
                         <h5 className='pt-2'>{course.name}</h5>
-                      </a>
                     </Link>
                     <p style={{ marginTop: '-10px' }}>{course.lessons.length} Lessons</p>
 

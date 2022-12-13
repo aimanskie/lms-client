@@ -5,7 +5,6 @@ import {
   AppstoreOutlined,
   CoffeeOutlined,
   LoginOutlined,
-  LogoutOutlined,
   UserAddOutlined,
   CarryOutOutlined,
   TeamOutlined,
@@ -18,9 +17,7 @@ import { toast } from 'react-toastify'
 const { Item, SubMenu, ItemGroup } = Menu
 
 const TopNav = () => {
-  const [current, setCurrent] = useState('')
-  // const [user1, setUser1] = useState(null)
-  // const [logOut, setLogOut] = useState(null)
+  const [current, setCurrent] = useState('/')
 
   const {
     state: { user },
@@ -29,102 +26,63 @@ const TopNav = () => {
   const router = useRouter()
 
   useEffect(() => {
-    // axios('/api/current-user1')
-    //   .then((data) => {
-    //     const { role } = data.data
-    //     setUser1(role)
-    //   })
-    //   .catch((err) => console.log(err))
-
     process.browser && setCurrent(window.location.pathname)
   }, [process.browser && window.location.pathname])
-
-  // useEffect(() => {
-  //   if (user.role.includes('Admin') || user.role.includes('Instructor')) {
-  //     setShow(true)
-  //   }
-  // }, [user.role])
 
   const logout = async () => {
     dispatch({ type: 'LOGOUT' })
     window.localStorage.removeItem('user')
     const { data } = await axios.get('/api/logout')
     toast(data.message)
-    // setUser1(null)
     router.push('/login')
   }
 
   return (
     <Menu theme='dark' mode='horizontal' selectedKeys={[current]} className='mb-2'>
       <Item key='/' onClick={(e) => setCurrent(e.key)} icon={<AppstoreOutlined />}>
-        <Link href='/'>
-          <a>LMS</a>
-        </Link>
+        <Link href='/'>LMS</Link>
       </Item>
-
-      {user && user.role && (user.role.includes('Admin') || user.role.includes('Instructor')) ? (
-        <Item key='/instructor/course/create' onClick={(e) => setCurrent(e.key)} icon={<CarryOutOutlined />}>
-          <Link href='/instructor/course/create'>
-            <a>Create Course</a>
-          </Link>
-        </Item>
-      ) : user !== null ? (
-        <Item key='/user/new-instructor' onClick={(e) => setCurrent(e.key)} icon={<TeamOutlined />}>
-          <Link href='/user/new-instructor'>
-            <a>Become Instructor</a>
-          </Link>
-        </Item>
-      ) : (
-        <Item></Item>
-      )}
-
-      {user === null && (
-        <>
-          <Item
-            className='text-end'
-            key='/login'
-            onClick={(e) => setCurrent(e.key)}
-            icon={<LoginOutlined />}
-            style={{ float: 'right' }}
-          >
-            <Link href='/login'>
-              <a>Login</a>
-            </Link>
+      <div style={{ position: 'absolute', top: 0, right: 0 }}>
+        {user && user.role && (user.role.includes('Admin') || user.role.includes('Instructor')) ? (
+          <Item key='/instructor/course/create' onClick={(e) => setCurrent(e.key)} icon={<CarryOutOutlined />}>
+            <Link href='/instructor/course/create'>Create Course</Link>
           </Item>
-          <Item
-            /* className='text-end' */
-            key='/register'
-            onClick={(e) => setCurrent(e.key)}
-            icon={<UserAddOutlined />}
-            style={{ float: 'right' }}
-          >
-            <Link href='/register'>
-              <a>Register</a>
-            </Link>
+        ) : user !== null ? (
+          <Item key='/user/new-instructor' onClick={(e) => setCurrent(e.key)} icon={<TeamOutlined />}>
+            <Link href='/user/new-instructor'>Become Instructor</Link>
           </Item>
-        </>
-      )}
+        ) : (
+          <Item></Item>
+        )}
 
-      {user !== null && (
-        <SubMenu icon={<CoffeeOutlined />} title={user && user.name} style={{ float: 'right' }}>
-          <ItemGroup>
-            <Item key='/user'>
-              <Link href='/user'>
-                <a>Dashboard</a>
-              </Link>
+        {user === null && (
+          <>
+            <Item key='/login' onClick={(e) => setCurrent(e.key)} icon={<LoginOutlined />}>
+              <Link href='/login'>Login</Link>
             </Item>
-            <Item onClick={logout}>Logout</Item>
-          </ItemGroup>
-        </SubMenu>
-      )}
+            <Item key='/register' onClick={(e) => setCurrent(e.key)} icon={<UserAddOutlined />}>
+              <Link href='/register'>Register</Link>
+            </Item>
+          </>
+        )}
 
-      {user && user.role && (user.role.includes('Admin') || user.role.includes('Instructor')) && (
-        <Item key='/instructor' onClick={(e) => setCurrent(e.key)} icon={<TeamOutlined />} style={{ float: 'right' }}>
-          <Link href='/instructor'>
-            <a>Instructor</a>
-          </Link>
-        </Item>
-      )}
+        {user && user.role && (user.role.includes('Admin') || user.role.includes('Instructor')) && (
+          <Item key='/instructor' onClick={(e) => setCurrent(e.key)} icon={<TeamOutlined />}>
+            <Link href='/instructor'>Instructor</Link>
+          </Item>
+        )}
+
+        {user !== null && (
+          <SubMenu icon={<CoffeeOutlined />} title={user && user.name}>
+            <ItemGroup>
+              <Item key='/user'>
+                <Link href='/user'>Dashboard</Link>
+              </Item>
+              <Item onClick={logout}>Logout</Item>
+            </ItemGroup>
+          </SubMenu>
+        )}
+      </div>
     </Menu>
   )
 }
