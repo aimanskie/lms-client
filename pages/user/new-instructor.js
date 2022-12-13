@@ -14,7 +14,6 @@ const newInstructor = () => {
   } = useContext(Context)
 
   const router = useRouter()
-  // console.log(user)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -27,7 +26,6 @@ const newInstructor = () => {
         type: 'LOGIN',
         payload: data,
       })
-      console.log('REGISTER RESPONSE', data)
       toast('Registration Instructor successful')
       setBankAccount('')
       setBank('')

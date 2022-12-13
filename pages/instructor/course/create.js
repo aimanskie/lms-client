@@ -36,7 +36,6 @@ const CourseCreate = () => {
         let { data } = await axios.post('/api/course/upload-image', {
           image: uri,
         })
-        console.log('IMAGE UPLOADED', data)
         setImage(data)
         setValues({ ...values, loading: false })
       } catch (err) {

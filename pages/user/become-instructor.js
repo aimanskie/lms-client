@@ -13,12 +13,10 @@ const BecomeInstructor = () => {
   } = useContext(Context)
 
   const becomeInstructor = () => {
-    // console.log("become instructor");
     setLoading(true)
     axios
       .post('/api/make-instructor')
       .then((res) => {
-        console.log(res)
         window.location.href = res.data
       })
       .catch((err) => {

@@ -24,7 +24,6 @@ const InstructorRevenue = () => {
       window.location.href = data
     } catch (err) {
       setLoading(false)
-      console.log(err)
       alert('Unable to access payout settings. Try later.')
     }
   }

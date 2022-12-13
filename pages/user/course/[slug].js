@@ -42,7 +42,6 @@ const SingleCourse = () => {
     const { data } = await axios.post(`/api/list-completed`, {
       courseId: course._id,
     })
-    console.log('COMPLETED LESSONS => ', data)
     setCompletedLessons(data)
   }
 
@@ -51,7 +50,6 @@ const SingleCourse = () => {
       courseId: course._id,
       lessonId: course.lessons[clicked]._id,
     })
-    console.log(data)
     setCompletedLessons([...completedLessons, course.lessons[clicked]._id])
   }
 
@@ -61,13 +59,10 @@ const SingleCourse = () => {
         courseId: course._id,
         lessonId: course.lessons[clicked]._id,
       })
-      console.log(data)
       const all = completedLessons
-      console.log('ALL => ', all)
       const index = all.indexOf(course.lessons[clicked]._id)
       if (index > -1) {
         all.splice(index, 1)
-        console.log('ALL WITHOUT REMOVED => ', all)
         setCompletedLessons(all)
         setUpdateState(!updateState)
       }

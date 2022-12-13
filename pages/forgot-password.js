@@ -6,7 +6,7 @@ import { Context } from '../context'
 import { useRouter } from 'next/router'
 
 const ForgotPassword = () => {
-  const [email, setEmail] = useState('testdev@assohwah.com')
+  const [email, setEmail] = useState('')
   const [success, setSuccess] = useState(false)
   const [code, setCode] = useState('')
   const [newPassword, setNewPassword] = useState('')

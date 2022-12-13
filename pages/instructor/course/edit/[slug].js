@@ -41,7 +41,6 @@ const CourseEdit = () => {
 
   const loadCourse = async () => {
     const { data } = await axios.get(`/api/course/${slug}`)
-    console.log(data)
     if (data) setValues(data)
     if (data && data.image) setImage(data.image)
   }
@@ -61,7 +60,6 @@ const CourseEdit = () => {
         let { data } = await axios.post('/api/course/upload-image', {
           image: uri,
         })
-        console.log('IMAGE UPLOADED', data)
         setImage(data)
         setValues({ ...values, loading: false })
       } catch (err) {
@@ -131,7 +129,6 @@ const CourseEdit = () => {
     const removed = allLessons.splice(index, 1)
     setValues({ ...values, lessons: allLessons })
     const { data } = await axios.put(`/api/course/${slug}/${removed[0]._id}`)
-    console.log('LESSON DELETED =>', data)
   }
 
   /**
@@ -142,7 +139,6 @@ const CourseEdit = () => {
     // remove previous video
     if (current.video && current.video.Location) {
       const res = await axios.post(`/api/course/video-remove/${values.instructor._id}`, current.video)
-      console.log('REMOVED ===>', res)
     }
     // upload
     const file = e.target.files[0]
@@ -156,7 +152,6 @@ const CourseEdit = () => {
     const { data } = await axios.post(`/api/course/video-upload/${values.instructor._id}`, videoData, {
       onUploadProgress: (e) => setProgress(Math.round((100 * e.loaded) / e.total)),
     })
-    console.log(data)
     setCurrent({ ...current, video: data })
     setUploading(false)
   }

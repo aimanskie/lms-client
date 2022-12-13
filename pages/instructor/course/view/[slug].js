@@ -49,7 +49,6 @@ const CourseView = () => {
     const { data } = await axios.post(`/api/instructor/student-count`, {
       courseId: course._id,
     })
-    console.log('STUDENT COUNT => ', data)
     setStudents(data.length)
   }
 
@@ -82,7 +81,6 @@ const CourseView = () => {
           setProgress(Math.round((100 * e.loaded) / e.total))
         },
       })
-      console.log(data)
       setValues({ ...values, video: data })
       setUploading(false)
     } catch (err) {
@@ -96,7 +94,6 @@ const CourseView = () => {
     try {
       setUploading(true)
       const { data } = await axios.post(`/api/course/video-remove/${course.instructor._id}`, values.video)
-      console.log(data)
       setValues({ ...values, video: {} })
       setUploading(false)
       setUploadButtonText('Upload another video')

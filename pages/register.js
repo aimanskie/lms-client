@@ -5,11 +5,12 @@ import { SyncOutlined } from '@ant-design/icons'
 import Link from 'next/link'
 import { Context } from '../context'
 import { useRouter } from 'next/router'
+import { Input, Button } from 'antd'
 
 const Register = () => {
-  const [name, setName] = useState('Test')
-  const [email, setEmail] = useState('testdev@assohwah.com')
-  const [password, setPassword] = useState('test123')
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
 
   const {
@@ -32,12 +33,12 @@ const Register = () => {
         password,
       })
       if (!data.ok) throw Error
-      toast('Registration successful. Please login.')
+      toast('Please check email for confirmation to complete registration')
       setName('')
       setEmail('')
       setPassword('')
       setLoading(false)
-      router.push('/login')
+      // router.push('/login')
     } catch (err) {
       toast(err.response.data)
       setLoading(false)
@@ -47,7 +48,6 @@ const Register = () => {
   return (
     <>
       <h1 className='jumbotron text-center bg-primary square'>Register</h1>
-
       <div className='container col-md-4 offset-md-4 pb-5'>
         <form onSubmit={handleSubmit}>
           <input
@@ -58,7 +58,6 @@ const Register = () => {
             placeholder='Enter name'
             required
           />
-
           <input
             type='email'
             className='form-control mb-4 p-4'
@@ -67,10 +66,8 @@ const Register = () => {
             placeholder='Enter email'
             required
           />
-
-          <input
-            type='password'
-            className='form-control mb-4 p-4'
+          <Input.Password
+            style={{ margin: 3 }}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder='Enter password'
