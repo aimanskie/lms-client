@@ -72,7 +72,7 @@ const Login = () => {
         </p>
 
         <p className='text-center'>
-          <Link href='/forgot-password text-danger'>Forgot password</Link>
+          <Link href='/forgot-password'>Forgot password</Link>
         </p>
       </div>
     </>

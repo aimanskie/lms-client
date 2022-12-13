@@ -23,7 +23,7 @@ const SingleCourseJumbotron = ({
           {/* title */}
           <h1 className='text-light font-weight-bold'>{name}</h1>
           {/* description */}
-          <p className='lead'>{description && description.substring(0, 160)}...</p>
+          <p className='lead'>{description && description.substring(0, 160)}</p>
           {/* category */}
           <Badge count={category} style={{ backgroundColor: '#03a9f4' }} className='pb-4 mr-2' />
           {/* author */}
@@ -71,12 +71,11 @@ const SingleCourseJumbotron = ({
           ) : (
             <Button
               className='mb-3 mt-3'
-              type='danger'
-              block
+              type='dashed'
               shape='round'
               icon={<SafetyOutlined />}
               size='large'
-              disabled={loading}
+              open={!loading}
               onClick={paid ? handlePaidEnrollment : handleFreeEnrollment}
             >
               {user ? (enrolled.status ? 'Go to course' : 'Enroll') : 'Login to enroll'}
