@@ -38,11 +38,11 @@ const TopNav = () => {
   }
 
   return (
-    <Menu theme='dark' mode='horizontal' selectedKeys={[current]} className='mb-0'>
+    <Menu theme='dark' mode='horizontal' selectedKeys={[current]} className='mb-0 w-100'>
       <Item key='/' onClick={(e) => setCurrent(e.key)} icon={<AppstoreOutlined />}>
         <Link href='/'>LMS</Link>
       </Item>
-      <div style={{ position: 'absolute', top: 0, right: 0 }}>
+      <div style={{ position: 'relative', top: 0, right: 0 }}>
         {user && user.role && (user.role.includes('Admin') || user.role.includes('Instructor')) ? (
           <Item key='/instructor/course/create' onClick={(e) => setCurrent(e.key)} icon={<CarryOutOutlined />}>
             <Link href='/instructor/course/create'>Create Course</Link>
