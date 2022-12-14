@@ -32,7 +32,7 @@ const InstructorIndex = () => {
                 <div className='row'>
                   <div className='col'>
                     <Link href={`/instructor/course/view/${course.slug}`} className='pointer mt-2 text-primary'>
-                        <h5 className='pt-2'>{course.name}</h5>
+                      <h5 className='pt-2'>{course.name}</h5>
                     </Link>
                     <p style={{ marginTop: '-10px' }}>{course.lessons.length} Lessons</p>
 
@@ -50,20 +50,18 @@ const InstructorIndex = () => {
                       </p>
                     )}
                   </div>
-
-                  <div className='col-md-3 mt-3 text-center'>
-                    {course.published ? (
-                      <Tooltip title='Published'>
-                        <CheckCircleOutlined className='h5 pointer text-success' />
-                      </Tooltip>
-                    ) : (
-                      <Tooltip title='Unpublished'>
-                        <CloseCircleOutlined className='h5 pointer text-warning' />
-                      </Tooltip>
-                    )}
-                  </div>
                 </div>
+                <div className='col mt-2'></div>
               </div>
+              {course.published ? (
+                <Tooltip title='Published'>
+                  <CheckCircleOutlined className='h5 pointer text-success align-self-center mr-5' />
+                </Tooltip>
+              ) : (
+                <Tooltip title='Unpublished'>
+                  <CloseCircleOutlined className='h5 pointer text-warning align-self-center mr-5' />
+                </Tooltip>
+              )}
             </div>
           </div>
         ))}

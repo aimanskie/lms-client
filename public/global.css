@@ -1,3 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+/* base styles */
+* {
+  margin: 0;
+  font-family: "Quicksand";
+  /* color: #333; */
+}
+
 .square {
   border-radius: 0px;
 }
@@ -11,3 +20,33 @@
 .pointer {
   cursor: pointer;
 }
+
+.home-icon {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+/* @media (min-width: 500px) {
+
+} */
+
+.player:active {
+  border: red;
+}
+
+/* @media (max-width: 700px) {
+  .text {
+    display: none;
+  }
+
+  .add-lesson {
+    justify-content: center;
+  }
+
+  .menu-course {
+    width: 10vh;
+    height: 80vh;
+    overflow: 'scroll';
+  }
+} */

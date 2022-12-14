@@ -213,7 +213,7 @@ const CourseEdit = () => {
         </div>
       </div>
 
-      <Modal title='Update lesson' centered visible={visible} onCancel={() => setVisible(false)} footer={null}>
+      <Modal title='Update lesson' centered open={visible} onCancel={() => setVisible(false)} footer={null}>
         <UpdateLessonForm
           current={current}
           setCurrent={setCurrent}

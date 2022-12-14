@@ -182,12 +182,12 @@ const CourseView = () => {
               </div>
             </div>
             <hr />
-            <div className='row'>
+            <div className='row text-center'>
               <div className='col'>
                 <ReactMarkdown source={course.description} />
               </div>
             </div>
-            <div className='row'>
+            <div className='row add-lesson'>
               <Button
                 onClick={() => setVisible(true)}
                 className='col-md-6 offset-md-3 text-center'
@@ -202,7 +202,7 @@ const CourseView = () => {
 
             <br />
 
-            <Modal title='+ Add Lesson' centered visible={visible} onCancel={() => setVisible(false)} footer={null}>
+            <Modal title='+ Add Lesson' centered open={visible} onCancel={() => setVisible(false)} footer={null}>
               <AddLessonForm
                 values={values}
                 setValues={setValues}
@@ -215,9 +215,16 @@ const CourseView = () => {
               />
             </Modal>
 
-            <div className='row pb-5'>
-              <div className='col lesson-list'>
-                <h4>{course && course.lessons && course.lessons.length} Lessons</h4>
+            <div className='col pb-5'>
+              <div className='row'>
+                <span className='col'>
+                  <h4>The course lessons</h4>
+                </span>
+                <span className='col text-center'>
+                  <h6>total {course && course.lessons && course.lessons.length} Lessons</h6>
+                </span>
+              </div>
+              <div>
                 <List
                   itemLayout='horizontal'
                   dataSource={course && course.lessons}
