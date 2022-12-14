@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createElement } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
 import StudentRoute from '../../../components/routes/StudentRoute.js'
@@ -7,17 +7,18 @@ import ReactPlayer from 'react-player'
 import ReactMarkdown from 'react-markdown'
 import {
   PlayCircleOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
+  // MenuFoldOutlined,
+  // MenuUnfoldOutlined,
   CheckCircleFilled,
   MinusCircleFilled,
 } from '@ant-design/icons'
+import { Context } from '../../../context'
 
 const { Item } = Menu
 
 const SingleCourse = () => {
   const [clicked, setClicked] = useState(-1)
-  const [collapsed, setCollapsed] = useState(false)
+  // const [collapsed, setCollapsed] = useState(false)
   const [course, setCourse] = useState({ lessons: [] })
   const [completedLessons, setCompletedLessons] = useState([])
   const [updateState, setUpdateState] = useState(false)
@@ -27,12 +28,20 @@ const SingleCourse = () => {
     width: undefined,
     height: undefined,
   })
+  // const [user, setUser] = useState({})
 
+  const {
+    state: { user },
+    // dispatch,
+  } = useContext(Context)
   const router = useRouter()
   const { slug } = router.query
 
   useEffect(() => {
     if (slug) loadCourse()
+    // const userDB = localStorage.getItem(user)
+    // console.log(userDB)
+    // setUser(user)
   }, [slug])
 
   useEffect(() => {
@@ -55,22 +64,29 @@ const SingleCourse = () => {
     if (windowSize.width < 600)
       setMediaQuery({
         width: '15vh',
-        height: '80vh',
+        height: '100vh',
         overflow: 'scroll',
         fontSize: '14px',
       })
     if (windowSize.width < 390)
       setMediaQuery({
         width: '13vh',
-        height: '80vh',
+        height: '100vh',
         overflow: 'scroll',
         fontSize: '9px',
       })
     if (windowSize.width > 600)
       setMediaQuery({
         width: '30vh',
-        height: '80vh',
+        height: '100vh',
         overflow: 'scroll',
+      })
+    if (windowSize.width > 1200)
+      setMediaQuery({
+        width: '30vh',
+        height: '100vh',
+        overflow: 'scroll',
+        fontSize: '22px',
       })
   }, [windowSize])
 
@@ -91,7 +107,7 @@ const SingleCourse = () => {
       courseId: course._id,
       lessonId: course.lessons[clicked]._id,
     })
-    setCompletedLessons([...completedLessons, course.lessons[clicked]._id])
+    setCompletedLessons(data.lessons)
   }
 
   const markIncompleted = async () => {
@@ -126,10 +142,10 @@ const SingleCourse = () => {
     <StudentRoute>
       <div className='row'>
         <div style={{ maWidth: 300 }}>
-          <Button onClick={() => setCollapsed(!collapsed)} className='text-primary mt-1 btn-block mb-2'>
-            {createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)} {!collapsed && 'Lessons'}
+          <Button className='text-primary mt-1 btn-block mb-2'>
+            {((completedLessons.length / course.lessons.length) * 100).toFixed(0)}% Complete
           </Button>
-          <Menu selectedKeys={[clicked]} inlineCollapsed={collapsed} style={mediaQuery}>
+          <Menu selectedKeys={[clicked]} style={mediaQuery}>
             {course.lessons.map((lesson, index) => (
               <Item onClick={() => setClicked(index)} key={index}>
                 {lesson.title.substring(0, 30)}{' '}
@@ -193,7 +209,11 @@ const SingleCourse = () => {
           ) : (
             <div className='d-flex justify-content-center p-5'>
               <div className='text-center p-5'>
-                <PlayCircleOutlined className='text-primary display-1 p-5' onClick={() => setClicked(0)} />
+                <PlayCircleOutlined
+                  // style={{ height: '20%' }}
+                  className='text-primary p-5 display-4'
+                  onClick={() => setClicked(0)}
+                />
                 <p className='lead'>Click on the lessons to start learning</p>
               </div>
             </div>

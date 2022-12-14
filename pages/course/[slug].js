@@ -13,6 +13,7 @@ const SingleCourse = ({ course }) => {
   const [preview, setPreview] = useState('')
   const [loading, setLoading] = useState(false)
   const [enrolled, setEnrolled] = useState({})
+  
   const {
     state: { user },
   } = useContext(Context)
@@ -27,7 +28,7 @@ const SingleCourse = ({ course }) => {
   }
 
   const router = useRouter()
-  // const { slug } = router.query
+  const { slug } = router.query
 
   const handlePaidEnrollment = async () => {
     try {

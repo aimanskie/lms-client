@@ -42,7 +42,7 @@ const InstructorIndex = () => {
                       </p>
                     ) : course.published ? (
                       <p style={myStyle} className='text-success'>
-                        Your course is live in the marketplace
+                        Your course is live
                       </p>
                     ) : (
                       <p style={myStyle} className='text-success'>

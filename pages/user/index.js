@@ -34,8 +34,6 @@ const UserIndex = () => {
       {loading && <SyncOutlined spin className='d-flex justify-content-center display-1 text-danger p-5' />}
       <h1 className='jumbotron text-center square w-100'>User dashboard</h1>
 
-      {/* show list of courses */}
-
       {courses &&
         courses.map((course) => (
           <div key={course._id} className='media pt-2 pb-1'>
@@ -52,13 +50,12 @@ const UserIndex = () => {
                     By {course.instructor.name}
                   </p>
                 </div>
-                <div className='col-md-3 mt-3 text-center'>
-                  <Link href={`/user/course/${course.slug}`}>
-                    <PlayCircleOutlined className='h2 pointer text-primary' />
-                  </Link>
-                </div>
+                <div className='col-md-3 mt-3 text-center align-self-center'></div>
               </div>
             </div>
+            <Link href={`/user/course/${course.slug}`}>
+              <PlayCircleOutlined className='h2 pointer text-primary mr-5' />
+            </Link>
           </div>
         ))}
     </UserRoute>
