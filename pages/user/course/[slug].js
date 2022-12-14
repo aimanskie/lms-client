@@ -51,41 +51,6 @@ const SingleCourse = () => {
     setCompletedLessons(data)
   }
 
-  const markCompleted = async () => {
-    const { data } = await axios.post(`/api/mark-completed`, {
-      courseId: course._id,
-      lessonId: course.lessons[clicked]._id,
-    })
-    setCompletedLessons([...completedLessons, course.lessons[clicked]._id])
-  }
-
-  const markIncompleted = async () => {
-    try {
-      const { data } = await axios.post(`/api/mark-incomplete`, {
-        courseId: course._id,
-        lessonId: course.lessons[clicked]._id,
-      })
-      const all = completedLessons
-      const index = all.indexOf(course.lessons[clicked]._id)
-      if (index > -1) {
-        all.splice(index, 1)
-        setCompletedLessons(all)
-        setUpdateState(!updateState)
-      }
-    } catch (err) {
-      console.log(err)
-    }
-  }
-  const handleBtnClick = (num) => {
-    if (num === 1) {
-      if (clicked + num === course.lessons.length) return setClicked(0)
-      setClicked(clicked + num)
-      return
-    }
-    setClicked(num)
-    return clicked
-  }
-
   useEffect(() => {
     if (windowSize.width < 600)
       setMediaQuery({
@@ -121,10 +86,42 @@ const SingleCourse = () => {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
+  const markCompleted = async () => {
+    const { data } = await axios.post(`/api/mark-completed`, {
+      courseId: course._id,
+      lessonId: course.lessons[clicked]._id,
+    })
+    setCompletedLessons([...completedLessons, course.lessons[clicked]._id])
+  }
+
+  const markIncompleted = async () => {
+    try {
+      const { data } = await axios.post(`/api/mark-incomplete`, {
+        courseId: course._id,
+        lessonId: course.lessons[clicked]._id,
+      })
+      const all = completedLessons
+      const index = all.indexOf(course.lessons[clicked]._id)
+      if (index > -1) {
+        all.splice(index, 1)
+        setCompletedLessons(all)
+        setUpdateState(!updateState)
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   const handlePlay = () => {
     if (playing) return setPlaying(false)
     setPlaying(true)
   }
+
+  const handleBtnClick = () => {
+    if (clicked + 1 === course.lessons.length) return setClicked(0)
+    else return setClicked(clicked + 1)
+  }
+
   return (
     <StudentRoute>
       <div className='row'>
@@ -132,9 +129,9 @@ const SingleCourse = () => {
           <Button onClick={() => setCollapsed(!collapsed)} className='text-primary mt-1 btn-block mb-2'>
             {createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)} {!collapsed && 'Lessons'}
           </Button>
-          <Menu selectedKeys={[handleBtnClick]} inlineCollapsed={collapsed} style={mediaQuery}>
+          <Menu selectedKeys={[clicked]} inlineCollapsed={collapsed} style={mediaQuery}>
             {course.lessons.map((lesson, index) => (
-              <Item onClick={(e) => handleBtnClick(e.key)} key={index}>
+              <Item onClick={() => setClicked(index)} key={index}>
                 {lesson.title.substring(0, 30)}{' '}
                 {completedLessons.includes(lesson._id) ? (
                   <CheckCircleFilled className='float-right text-primary ml-2' style={{ marginTop: '13px' }} />
@@ -153,10 +150,10 @@ const SingleCourse = () => {
                 <h3 style={{ textAlign: 'center' }} className='m-0 col'>
                   {course.lessons[clicked].title.substring(0, 30)}
                 </h3>
-                <button className='float-right m-0' onClick={() => handleBtnClick(1)}>
+                <button className='float-right m-0' onClick={() => handleBtnClick()}>
                   next lesson
                 </button>
-                <button className='float-right m-0' onClick={() => handleBtnClick(-1)}>
+                <button className='float-right m-0' onClick={() => setClicked(clicked - 1)}>
                   previous lesson
                 </button>
               </div>
