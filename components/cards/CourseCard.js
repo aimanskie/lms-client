@@ -16,7 +16,27 @@ const CourseCard = ({ course }) => {
 
   return (
     <>
-      {user && !user.courses.includes(id) ? (
+      {user && user.courses.includes(id) ? (
+        <Link href={`/user/course/${slug}`}>
+          <Card
+            className='mb-4'
+            cover={
+              <img
+                src={image && image.Location}
+                alt={name}
+                style={{ height: '200px', objectFit: 'cover' }}
+                className='p-1'
+              />
+            }
+          >
+            <h2 className='font-weight-bold'>{name}</h2>
+
+            <p>by {instructor.name}</p>
+            <Badge count={category} style={{ backgroundColor: '#03a9f4' }} className='pb-2 mr-2' />
+            <div>You have Enrolled</div>
+          </Card>
+        </Link>
+      ) : (
         <Link href={`/course/${slug}`}>
           <Card
             className='mb-4'
@@ -42,26 +62,6 @@ const CourseCard = ({ course }) => {
                   })
                 : 'Free'}
             </h4>
-          </Card>
-        </Link>
-      ) : (
-        <Link href={`/user/course/${slug}`}>
-          <Card
-            className='mb-4'
-            cover={
-              <img
-                src={image && image.Location}
-                alt={name}
-                style={{ height: '200px', objectFit: 'cover' }}
-                className='p-1'
-              />
-            }
-          >
-            <h2 className='font-weight-bold'>{name}</h2>
-
-            <p>by {instructor.name}</p>
-            <Badge count={category} style={{ backgroundColor: '#03a9f4' }} className='pb-2 mr-2' />
-            <div>You have Enrolled</div>
           </Card>
         </Link>
       )}

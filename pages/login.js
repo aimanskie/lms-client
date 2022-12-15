@@ -1,16 +1,15 @@
-import { useState, useContext, useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { SyncOutlined } from '@ant-design/icons'
-import Link from 'next/link'
 import { Context } from '../context'
 import { useRouter } from 'next/router'
-import { Input } from 'antd'
+import { Button, Form, Input } from 'antd'
 
 const Login = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
+  const layout = {
+    labelCol: { span: 8 },
+    wrapperCol: { span: 8 },
+  }
 
   const {
     state: { user },
@@ -18,15 +17,15 @@ const Login = () => {
   } = useContext(Context)
 
   const router = useRouter()
+  const [form] = Form.useForm()
 
   useEffect(() => {
     if (user !== null) router.push('/')
   }, [user])
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  const handleSubmit = async ({ user }) => {
     try {
-      setLoading(true)
+      const { email, password } = user
       const { data } = await axios.post(`/api/login`, {
         email,
         password,
@@ -35,46 +34,38 @@ const Login = () => {
         type: 'LOGIN',
         payload: data,
       })
-      window.localStorage.setItem('user', JSON.stringify(data))
+      const dataUser = {
+        courses: data.courses,
+        name: data.name,
+        role: data.role,
+        stripeSession: data.stripeSession,
+        _id: data._id,
+      }
+      window.localStorage.setItem('user', JSON.stringify(dataUser))
+      form.resetFields()
       router.push('/user')
     } catch (err) {
       toast(err.response.data)
-      setLoading(false)
     }
   }
 
   return (
     <>
-      <h1 className='jumbotron text-center bg-primary square'>Login</h1>
-      <div className='container col-md-4 offset-md-4 pb-5'>
-        <form onSubmit={handleSubmit}>
-          <input
-            type='email'
-            className='form-control mb-4 p-4'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder='Enter email'
-            required
-          />
-          <Input.Password
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder='Enter password'
-            required
-          />
-          <button type='submit' className='btn btn-block btn-primary' disabled={!email || !password || loading}>
-            {loading ? <SyncOutlined spin /> : 'Submit'}
-          </button>
-        </form>
-
-        <p className='text-center pt-3'>
-          Not yet registered? <Link href='/register'>Register</Link>
-        </p>
-
-        <p className='text-center'>
-          <Link href='/forgot-password'>Forgot password</Link>
-        </p>
-      </div>
+      <h1 className='jumbotron text-center bg-primary square'>Register</h1>
+      <div className='container col-md-4 offset-md-4 pb-5'></div>
+      <Form {...layout} form={form} name='nest-messages' onFinish={handleSubmit}>
+        <Form.Item name={['user', 'email']} label='Email'>
+          <Input />
+        </Form.Item>
+        <Form.Item name={['user', 'password']} label='Password'>
+          <Input.Password />
+        </Form.Item>
+        <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
+          <Button type='primary' htmlType='submit'>
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
     </>
   )
 }

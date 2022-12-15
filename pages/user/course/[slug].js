@@ -5,20 +5,13 @@ import StudentRoute from '../../../components/routes/StudentRoute.js'
 import { Button, Menu } from 'antd'
 import ReactPlayer from 'react-player'
 import ReactMarkdown from 'react-markdown'
-import {
-  PlayCircleOutlined,
-  // MenuFoldOutlined,
-  // MenuUnfoldOutlined,
-  CheckCircleFilled,
-  MinusCircleFilled,
-} from '@ant-design/icons'
+import { PlayCircleOutlined, CheckCircleFilled, MinusCircleFilled } from '@ant-design/icons'
 import { Context } from '../../../context'
 
 const { Item } = Menu
 
 const SingleCourse = () => {
   const [clicked, setClicked] = useState(-1)
-  // const [collapsed, setCollapsed] = useState(false)
   const [course, setCourse] = useState({ lessons: [] })
   const [completedLessons, setCompletedLessons] = useState([])
   const [updateState, setUpdateState] = useState(false)
@@ -28,7 +21,6 @@ const SingleCourse = () => {
     width: undefined,
     height: undefined,
   })
-  // const [user, setUser] = useState({})
 
   const {
     state: { user },
@@ -39,9 +31,6 @@ const SingleCourse = () => {
 
   useEffect(() => {
     if (slug) loadCourse()
-    // const userDB = localStorage.getItem(user)
-    // console.log(userDB)
-    // setUser(user)
   }, [slug])
 
   useEffect(() => {
@@ -141,7 +130,7 @@ const SingleCourse = () => {
   return (
     <StudentRoute>
       <div className='row'>
-        <div style={{ maWidth: 300 }}>
+        <div>
           <Button className='text-primary mt-1 btn-block mb-2'>
             {((completedLessons.length / course.lessons.length) * 100).toFixed(0)}% Complete
           </Button>
@@ -159,7 +148,14 @@ const SingleCourse = () => {
           </Menu>
         </div>
 
-        <div className='col'>
+        <div
+          className='col'
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
           {clicked !== -1 ? (
             <>
               <div className='col'>
@@ -184,38 +180,35 @@ const SingleCourse = () => {
                 </p>
               )}
 
-              {course.lessons[clicked].video && course.lessons[clicked].video.Location && (
-                <>
-                  <div className='wrapper'>
-                    <ReactPlayer
-                      className='player'
-                      url={course.lessons[clicked].video.Location}
-                      width='100%'
-                      height='100%'
-                      controls
-                      onEnded={() => markCompleted()}
-                      volume={0.8}
-                      playing={playing}
-                      config={{ file: { attributes: { controlsList: 'nodownload' } } }}
-                      onContextMenu={(e) => e.preventDefault()}
-                      onClick={handlePlay}
-                    />
-                  </div>
-                </>
-              )}
+              {course.lessons &&
+                course.lessons[clicked] &&
+                course.lessons[clicked].video &&
+                course.lessons[clicked].video.Location && (
+                  <>
+                    <div className='wrapper'>
+                      <ReactPlayer
+                        className='player'
+                        url={course.lessons[clicked].video.Location}
+                        width='100%'
+                        height='100%'
+                        controls
+                        onEnded={() => markCompleted()}
+                        volume={0.8}
+                        playing={playing}
+                        config={{ file: { attributes: { controlsList: 'nodownload' } } }}
+                        onContextMenu={(e) => e.preventDefault()}
+                        onClick={handlePlay}
+                      />
+                    </div>
+                  </>
+                )}
 
               <ReactMarkdown children={course.lessons[clicked].content} className='single-post' />
             </>
           ) : (
-            <div className='d-flex justify-content-center p-5'>
-              <div className='text-center p-5'>
-                <PlayCircleOutlined
-                  // style={{ height: '20%' }}
-                  className='text-primary p-5 display-4'
-                  onClick={() => setClicked(0)}
-                />
-                <p className='lead'>Click on the lessons to start learning</p>
-              </div>
+            <div style={{ fontSize: '50px', textAlign: 'center' }}>
+              <PlayCircleOutlined onClick={() => setClicked(0)} />
+              <p className='lead'>Click on the lessons to start learning</p>
             </div>
           )}
         </div>

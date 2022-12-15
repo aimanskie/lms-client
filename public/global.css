@@ -50,3 +50,7 @@
     overflow: 'scroll';
   }
 } */
+
+::placeholder {
+  color: red;
+}

@@ -1,32 +1,38 @@
-import { useState, useEffect, useContext } from 'react'
+import { useEffect, useContext } from 'react'
+import { Button, Form, Input, InputNumber } from 'antd'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { SyncOutlined } from '@ant-design/icons'
-import Link from 'next/link'
 import { Context } from '../context'
 import { useRouter } from 'next/router'
-import { Input, Button } from 'antd'
 
 const Register = () => {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
+  const layout = {
+    labelCol: { span: 8 },
+    wrapperCol: { span: 8 },
+  }
+
+  const validateMessages = {
+    required: '${label} is required!',
+    types: {
+      email: '${label} is not a valid email!',
+    },
+    string: { min: '${label} must be at least 6 characters' },
+  }
+
+  const [form] = Form.useForm()
 
   const {
     state: { user },
   } = useContext(Context)
-
   const router = useRouter()
 
   useEffect(() => {
     if (user !== null) router.push('/')
   }, [user])
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  const onFinish = async ({ user }) => {
     try {
-      setLoading(true)
+      const { name, email, password } = user
       const { data } = await axios.post(`/api/register`, {
         name,
         email,
@@ -34,59 +40,43 @@ const Register = () => {
       })
       if (!data.ok) throw Error
       toast('Please check email for confirmation to complete registration')
-      setName('')
-      setEmail('')
-      setPassword('')
-      setLoading(false)
+      form.resetFields()
       router.push('/login')
     } catch (err) {
-      toast(err.response.data)
-      setLoading(false)
+      toast.error(err.response.data)
     }
   }
 
   return (
     <>
       <h1 className='jumbotron text-center bg-primary square'>Register</h1>
-      <div className='container col-md-4 offset-md-4 pb-5'>
-        <form onSubmit={handleSubmit}>
-          <input
-            type='text'
-            className='form-control mb-4 p-4'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder='Enter name'
-            required
-          />
-          <input
-            type='email'
-            className='form-control mb-4 p-4'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder='Enter email'
-            required
-          />
-          <Input.Password
-            style={{ margin: 3 }}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder='Enter password'
-            required
-          />
-
-          <button
-            type='submit'
-            className='btn btn-block btn-primary'
-            disabled={!name || !email || !password || loading}
-          >
-            {loading ? <SyncOutlined spin /> : 'Submit'}
-          </button>
-        </form>
-
-        <p className='text-center p-3'>
-          Already registered? <Link href='/login'>Login</Link>
-        </p>
-      </div>
+      <div className='container col-md-4 offset-md-4 pb-5'></div>
+      <Form {...layout} form={form} name='nest-messages' onFinish={onFinish} validateMessages={validateMessages}>
+        <Form.Item name={['user', 'name']} label='Name' rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item name={['user', 'email']} label='Email' rules={[{ type: 'email', required: true }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name={['user', 'password']}
+          label='Password'
+          rules={[
+            { required: true, min: 6 },
+            {
+              pattern: '(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])',
+              message: 'Password must have at least one upper case letter, one digit and one special character',
+            },
+          ]}
+        >
+          <Input.Password />
+        </Form.Item>
+        <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
+          <Button type='primary' htmlType='submit'>
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
     </>
   )
 }
