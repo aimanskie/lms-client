@@ -17,6 +17,11 @@ const SingleCourse = () => {
   const [updateState, setUpdateState] = useState(false)
   const [playing, setPlaying] = useState(true)
   const [mediaQuery, setMediaQuery] = useState({ width: '30vh', height: '80vh', overflow: 'scroll' })
+  const [mediaQuery2, setMediaQuery2] = useState({
+    fontSize: '50px',
+    textAlign: 'center',
+    alignItems: 'center',
+  })
   const [windowSize, setWindowSize] = useState({
     width: undefined,
     height: undefined,
@@ -57,19 +62,31 @@ const SingleCourse = () => {
         overflow: 'scroll',
         fontSize: '14px',
       })
-    if (windowSize.width < 390)
+    if (windowSize.width < 390) {
       setMediaQuery({
         width: '13vh',
         height: '100vh',
         overflow: 'scroll',
         fontSize: '9px',
       })
-    if (windowSize.width > 600)
+      setMediaQuery2({
+        fontSize: '14px',
+        textAlign: 'center',
+        alignItems: 'center',
+      })
+    }
+    if (windowSize.width > 600) {
       setMediaQuery({
         width: '30vh',
         height: '100vh',
         overflow: 'scroll',
       })
+      setMediaQuery2({
+        fontSize: '30px',
+        textAlign: 'center',
+        alignItems: 'center',
+      })
+    }
     if (windowSize.width > 1200)
       setMediaQuery({
         width: '30vh',
@@ -148,18 +165,11 @@ const SingleCourse = () => {
           </Menu>
         </div>
 
-        <div
-          className='col'
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
+        <div className='col'>
           {clicked !== -1 ? (
             <>
               <div className='col'>
-                <h3 style={{ textAlign: 'center' }} className='m-0 col'>
+                <h3 style={{ textAlign: 'center', paddingTop: '30px' }} className='m-0 col'>
                   {course.lessons[clicked].title.substring(0, 30)}
                 </h3>
                 <button className='float-right m-0' onClick={() => handleBtnClick()}>
@@ -206,9 +216,9 @@ const SingleCourse = () => {
               <ReactMarkdown children={course.lessons[clicked].content} className='single-post' />
             </>
           ) : (
-            <div style={{ fontSize: '50px', textAlign: 'center' }}>
+            <div style={mediaQuery2}>
               <PlayCircleOutlined onClick={() => setClicked(0)} />
-              <p className='lead'>Click on the lessons to start learning</p>
+              <div>Click on the lessons to start learning</div>
             </div>
           )}
         </div>
