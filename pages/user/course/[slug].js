@@ -151,6 +151,7 @@ const SingleCourse = () => {
     if (!objStore[clicked]) {
       objStore[clicked] = 0
       let obj = objStore
+      setObjStore(obj)
       localStorage.setItem('lesson', JSON.stringify(obj))
     }
     let startDuration = JSON.parse(localStorage.getItem('lesson'))
@@ -161,6 +162,7 @@ const SingleCourse = () => {
     let timeStamp = player.current.getCurrentTime()
     objStore[clicked] = timeStamp
     let obj = objStore
+    setObjStore(obj)
     localStorage.setItem('lesson', JSON.stringify(obj))
   }
 
