@@ -121,7 +121,7 @@ const SingleCourse = () => {
     let obj = objStore
     window.localStorage.setItem('lesson', JSON.stringify(obj))
     setTimeout(() => {
-      setClicked(clicked + 1)
+      handleBtnClick()
     }, 2000)
   }
 

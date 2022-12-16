@@ -1,18 +1,18 @@
-import { useContext } from 'react'
-import { Context } from '../../context'
+import { useState, useEffect, useContext } from 'react'
 import { Card, Badge } from 'antd'
 import Link from 'next/link'
-// import user from '../../../lms-server/models/user'
+import { Context } from '../../context'
 import { currencyFormatter } from '../../utils/helpers'
-
-const { Meta } = Card
+import axios from 'axios'
 
 const CourseCard = ({ course }) => {
+  let [user, setUser] = useState(null)
+
   const { _id: id, name, instructor, price, image, slug, paid, category } = course
 
-  const {
-    state: { user },
-  } = useContext(Context)
+  useEffect(() => {
+    axios(`/api/current-user1`).then((user) => setUser(user.data))
+  }, [])
 
   return (
     <>

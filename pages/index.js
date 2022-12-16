@@ -20,6 +20,7 @@ const Index = ({ courses }) => {
 
 export async function getServerSideProps() {
   const { data } = await axios.get(`${process.env.API}/courses`)
+  console.log(data)
   return {
     props: {
       courses: data,
