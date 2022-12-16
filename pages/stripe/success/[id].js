@@ -1,12 +1,14 @@
-import { useEffect } from 'react'
+import { useEffect, useContext } from 'react'
 import { SyncOutlined } from '@ant-design/icons'
 import UserRoute from '../../../components/routes/UserRoute.js'
 import { useRouter } from 'next/router'
 import axios from 'axios'
+import { Context } from '../../../context/index.js'
 
 const StripeSuccess = () => {
   const router = useRouter()
   const { id } = router.query
+  const { dispatch } = useContext(Context)
 
   useEffect(() => {
     if (id) successRequest()
@@ -15,6 +17,10 @@ const StripeSuccess = () => {
   const successRequest = async () => {
     try {
       const { data } = await axios.get(`/api/stripe-success/${id}`)
+      // dispatch({
+      //   type: 'LOGIN',
+      //   payload: { courses: [id] },
+      // })
       router.push(`/user/course/${data.course.slug}`)
     } catch (err) {
       console.log(err)

@@ -199,8 +199,8 @@ const SingleCourse = () => {
                 <h3 style={{ textAlign: 'center', paddingTop: '20px' }} className='m-0 col'>
                   {course.lessons[clicked].title.substring(0, 30)}
                 </h3>
-                <button className='float-right m-0' onClick={() => handleBtnClick()}>
-                  next lesson
+                <button className='float-right m-0' onClick={() => markCompleted()}>
+                  Mark complete and next lesson
                 </button>
                 <button className='float-right m-0' onClick={() => setClicked(clicked - 1)}>
                   previous lesson
@@ -211,9 +211,7 @@ const SingleCourse = () => {
                     Still watching, press here to mark as incomplete
                   </p>
                 ) : (
-                  <p className='float-left pointer' onClick={markCompleted}>
-                    Completed the lesson, press here to mark as completed
-                  </p>
+                  ''
                 )}
               </div>
 

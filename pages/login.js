@@ -38,10 +38,10 @@ const Login = () => {
         courses: data.courses,
         name: data.name,
         role: data.role,
-        stripeSession: data.stripeSession,
+        // stripeSession: data.stripeSession,
         _id: data._id,
       }
-      window.localStorage.setItem('user', JSON.stringify(data))
+      window.localStorage.setItem('user', JSON.stringify(dataUser))
       form.resetFields()
       router.push('/user')
     } catch (err) {

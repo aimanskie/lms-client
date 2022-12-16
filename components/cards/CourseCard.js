@@ -1,27 +1,27 @@
-import { useState, useEffect, useContext } from 'react'
+import { useEffect, useState } from 'react'
 import { Card, Badge } from 'antd'
 import Link from 'next/link'
-import { Context } from '../../context'
 import { currencyFormatter } from '../../utils/helpers'
 import axios from 'axios'
 
 const CourseCard = ({ course }) => {
-  let [user, setUser] = useState(null)
+  const [user, setUser] = useState(null)
 
   const { _id: id, name, instructor, price, image, slug, paid, category } = course
 
   useEffect(() => {
-    axios(`/api/current-user1`)
-      .then((user) => {
-        console.log(user)
-        setUser(user.data)
-      })
-      .catch((err) => console.log(err))
+    storageWindow()
   }, [])
+
+  const storageWindow = async () => {
+    const user2 = JSON.parse(window.localStorage.getItem('user'))
+    const user1 = await axios(`/api/current-user1?id=${user2._id}`)
+    setUser(user1.data)
+  }
 
   return (
     <>
-      {user && user.courses.includes(id) ? (
+      {user && user.courses && user.courses.includes(id) ? (
         <Link href={`/user/course/${slug}`}>
           <Card
             className='mb-4'

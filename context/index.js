@@ -1,4 +1,4 @@
-import { useReducer, createContext, useEffect } from 'react'
+import { useReducer, createContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 
@@ -64,7 +64,13 @@ const Provider = ({ children }) => {
     getCsrfToken()
   }, [])
 
-  return <Context.Provider value={{ state, dispatch }}>{children}</Context.Provider>
+  const value = {
+    state,
+    dispatch,
+    // user,
+  }
+
+  return <Context.Provider value={value}>{children}</Context.Provider>
 }
 
 export { Context, Provider }
