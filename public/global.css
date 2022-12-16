@@ -4,7 +4,7 @@
 * {
   margin: 0;
   font-family: "Quicksand";
-  /* color: #333; */
+  border: red solid 0.5px;
 }
 
 .square {
