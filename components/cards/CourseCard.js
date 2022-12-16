@@ -11,7 +11,12 @@ const CourseCard = ({ course }) => {
   const { _id: id, name, instructor, price, image, slug, paid, category } = course
 
   useEffect(() => {
-    axios(`/api/current-user1`).then((user) => setUser(user.data))
+    axios(`/api/current-user1`)
+      .then((user) => {
+        console.log(user)
+        setUser(user.data)
+      })
+      .catch((err) => console.log(err))
   }, [])
 
   return (

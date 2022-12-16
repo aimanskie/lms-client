@@ -41,7 +41,7 @@ const Login = () => {
         stripeSession: data.stripeSession,
         _id: data._id,
       }
-      window.localStorage.setItem('user', JSON.stringify(dataUser))
+      window.localStorage.setItem('user', JSON.stringify(data))
       form.resetFields()
       router.push('/user')
     } catch (err) {
