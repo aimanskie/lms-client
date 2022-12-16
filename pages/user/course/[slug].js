@@ -120,7 +120,7 @@ const SingleCourse = () => {
     objStore[clicked] = 0
     let obj = objStore
     setTimeout(() => {
-      localStorage.setItem('lesson', JSON.stringify(obj))
+      window.localStorage.setItem('lesson', JSON.stringify(obj))
       setClicked(clicked + 1)
     }, 2000)
   }
@@ -152,9 +152,9 @@ const SingleCourse = () => {
       objStore[clicked] = 0
       let obj = objStore
       setObjStore(obj)
-      localStorage.setItem('lesson', JSON.stringify(obj))
+      window.localStorage.setItem('lesson', JSON.stringify(obj))
     }
-    let startDuration = JSON.parse(localStorage.getItem('lesson'))
+    let startDuration = JSON.parse(window.localStorage.getItem('lesson'))
     player.current.seekTo(startDuration[clicked])
   }
 
@@ -163,7 +163,7 @@ const SingleCourse = () => {
     objStore[clicked] = timeStamp
     let obj = objStore
     setObjStore(obj)
-    localStorage.setItem('lesson', JSON.stringify(obj))
+    window.localStorage.setItem('lesson', JSON.stringify(obj))
   }
 
   const handleBtnClick = () => {
