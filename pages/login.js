@@ -51,7 +51,7 @@ const Login = () => {
 
   return (
     <>
-      <h1 className='jumbotron text-center bg-primary square'>Register</h1>
+      <h1 className='jumbotron text-center bg-primary square'>Login</h1>
       <div className='container col-md-4 offset-md-4 pb-5'></div>
       <Form {...layout} form={form} name='nest-messages' onFinish={handleSubmit}>
         <Form.Item name={['user', 'email']} label='Email'>
