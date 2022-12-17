@@ -21,6 +21,7 @@ const StripeSuccess = () => {
       //   type: 'LOGIN',
       //   payload: { courses: [id] },
       // })
+      console.log(data)
       router.push(`/user/course/${data.course.slug}`)
     } catch (err) {
       console.log(err)
