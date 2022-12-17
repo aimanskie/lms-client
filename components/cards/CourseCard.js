@@ -15,8 +15,10 @@ const CourseCard = ({ course }) => {
 
   const storageWindow = async () => {
     const user2 = JSON.parse(window.localStorage.getItem('user'))
-    const user1 = await axios(`/api/current-user1?id=${user2._id}`)
-    setUser(user1.data)
+    if (user2) {
+      const user1 = await axios(`/api/current-user1?id=${user2._id}`)
+      setUser(user1.data)
+    }
   }
 
   return (
