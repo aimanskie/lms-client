@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
 import StudentRoute from '../../../components/routes/StudentRoute.js'
@@ -6,7 +6,7 @@ import { Button, Menu } from 'antd'
 import ReactPlayer from 'react-player'
 import ReactMarkdown from 'react-markdown'
 import { PlayCircleOutlined, CheckCircleFilled, MinusCircleFilled } from '@ant-design/icons'
-import { Context } from '../../../context'
+// import { Context } from '../../../context'
 
 const { Item } = Menu
 
@@ -27,10 +27,6 @@ const SingleCourse = () => {
     height: undefined,
   })
 
-  const {
-    state: { user },
-    // dispatch,
-  } = useContext(Context)
   const router = useRouter()
   const { slug } = router.query
   const player = useRef()
@@ -111,18 +107,28 @@ const SingleCourse = () => {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  const markCompleted = async () => {
-    const { data } = await axios.post(`/api/mark-completed`, {
-      courseId: course._id,
-      lessonId: course.lessons[clicked]._id,
-    })
-    setCompletedLessons(data.lessons)
+  const markCompleted = () => {
+    if (completedLessons.includes(course.lessons[clicked]._id)) return cleanUp()
+
+    axios
+      .post(`/api/mark-completed`, {
+        courseId: course._id,
+        lessonId: course.lessons[clicked]._id,
+      })
+      .then(() => {
+        setCompletedLessons((prevData) => [...prevData, course.lessons[clicked]._id])
+        cleanUp()
+      })
+      .catch((err) => console.log(err))
+  }
+
+  const cleanUp = async () => {
     objStore[clicked] = 0
     let obj = objStore
     window.localStorage.setItem('lesson', JSON.stringify(obj))
     setTimeout(() => {
       handleBtnClick()
-    }, 2000)
+    }, 1000)
   }
 
   const markIncompleted = async () => {
@@ -199,14 +205,14 @@ const SingleCourse = () => {
                 <h3 style={{ textAlign: 'center', paddingTop: '20px' }} className='m-0 col'>
                   {course.lessons[clicked].title.substring(0, 30)}
                 </h3>
-                <button className='float-right m-0' onClick={() => markCompleted()}>
+                <button className='float-right m-0' onClick={markCompleted}>
                   Mark complete and next lesson
                 </button>
                 <button className='float-right m-0' onClick={() => setClicked(clicked - 1)}>
                   previous lesson
                 </button>
 
-                {completedLessons.includes(course.lessons[clicked]._id) ? (
+                {completedLessons && completedLessons.includes(course.lessons[clicked]._id) ? (
                   <p className='float-left pointer' onClick={markIncompleted}>
                     Still watching, press here to mark as incomplete
                   </p>
@@ -227,8 +233,8 @@ const SingleCourse = () => {
                       width='100%'
                       height='100%'
                       controls
-                      onPause={() => handleStop()}
-                      onEnded={() => markCompleted()}
+                      onPause={handleStop}
+                      onEnded={markCompleted}
                       config={{ file: { attributes: { controlsList: 'nodownload' } } }}
                       onContextMenu={(e) => e.preventDefault()}
                     />
