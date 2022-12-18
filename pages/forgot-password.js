@@ -4,55 +4,48 @@ import { toast } from 'react-toastify'
 import { SyncOutlined } from '@ant-design/icons'
 import { Context } from '../context'
 import { useRouter } from 'next/router'
+import { Form, Input, Space, Button } from 'antd'
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('')
   const [success, setSuccess] = useState(false)
   const [code, setCode] = useState('')
   const [newPassword, setNewPassword] = useState('')
-  const [loading, setLoading] = useState(false)
 
   const {
     state: { user },
   } = useContext(Context)
 
   const router = useRouter()
+  const [form] = Form.useForm()
 
   useEffect(() => {
     if (user !== null) router.push('/')
   }, [user])
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
+  const handleSubmit = async ({ user }) => {
+    const { email } = user
     try {
       const { data } = await axios.post('/api/forgot-password', { email })
       setSuccess(true)
       toast('Check your email for the secret code')
-      setLoading(false)
     } catch (err) {
-      setLoading(false)
       toast(err.response.data)
     }
   }
 
-  const handleResetPassword = async (e) => {
-    e.preventDefault()
+  const handleResetPassword = async ({ user }) => {
+    const { email, code, newPassword } = user
     try {
-      setLoading(true)
       const { data } = await axios.post('/api/reset-password', {
         email,
         code,
         newPassword,
       })
-      setEmail('')
-      setCode('')
-      setNewPassword('')
-      setLoading(false)
       toast('Great! Now you can login with your new password')
+      form.resetFields()
       router.push('/login')
     } catch (err) {
-      setLoading(false)
       toast(err.response.data)
     }
   }
@@ -60,8 +53,30 @@ const ForgotPassword = () => {
   return (
     <>
       <h1 className='jumbotron text-center bg-primary square'>Forgot Password</h1>
+      <Space direction='vertical' align='center'>
+        <Form form={form} name='nest-messages' onFinish={success ? handleResetPassword : handleSubmit}>
+          <Form.Item name={['user', 'email']} label='Email'>
+            <Input />
+          </Form.Item>
+          {success && (
+            <>
+              <Form.Item name={['user', 'code']} label='Secret Code'>
+                <Input />
+              </Form.Item>
+              <Form.Item name={['user', 'newPassword']} label='New Password'>
+                <Input.Password />
+              </Form.Item>
+            </>
+          )}
+          <Form.Item>
+            <Button type='primary' htmlType='submit' block>
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+      </Space>
 
-      <div className='container col-md-4 offset-md-4 pb-5'>
+      {/* <div className='container col-md-4 offset-md-4 pb-5'>
         <form onSubmit={success ? handleResetPassword : handleSubmit}>
           <input
             type='email'
@@ -97,7 +112,7 @@ const ForgotPassword = () => {
             {loading ? <SyncOutlined spin /> : 'Submit'}
           </button>
         </form>
-      </div>
+      </div> */}
     </>
   )
 }

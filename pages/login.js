@@ -3,7 +3,8 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import { Context } from '../context'
 import { useRouter } from 'next/router'
-import { Button, Form, Input } from 'antd'
+import { Button, Form, Input, Space, Typography } from 'antd'
+const { Link } = Typography
 
 const Login = () => {
   const layout = {
@@ -38,7 +39,6 @@ const Login = () => {
         courses: data.courses,
         name: data.name,
         role: data.role,
-        // stripeSession: data.stripeSession,
         _id: data._id,
       }
       window.localStorage.setItem('user', JSON.stringify(dataUser))
@@ -52,20 +52,23 @@ const Login = () => {
   return (
     <>
       <h1 className='jumbotron text-center bg-primary square'>Login</h1>
-      <div className='container col-md-4 offset-md-4 pb-5'></div>
-      <Form {...layout} form={form} name='nest-messages' onFinish={handleSubmit}>
-        <Form.Item name={['user', 'email']} label='Email'>
-          <Input />
-        </Form.Item>
-        <Form.Item name={['user', 'password']} label='Password'>
-          <Input.Password />
-        </Form.Item>
-        <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-          <Button type='primary' htmlType='submit'>
-            Submit
-          </Button>
-        </Form.Item>
-      </Form>
+      <Space direction='vertical' align='center'>
+        <Form form={form} name='nest-messages' onFinish={handleSubmit}>
+          <Form.Item name={['user', 'email']} label='Email'>
+            <Input />
+          </Form.Item>
+          <Form.Item name={['user', 'password']} label='Password'>
+            <Input.Password />
+          </Form.Item>
+          <Form.Item>
+            <Button type='primary' htmlType='submit' block>
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+        <Link href='/register'>New user</Link>
+        <Link href='/forgot-password'>Forgot password</Link>
+      </Space>
     </>
   )
 }
