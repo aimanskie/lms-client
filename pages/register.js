@@ -71,14 +71,14 @@ const Register = () => {
                 pattern: '(?=.*?[A-Z])',
                 message: `One Upper Case`,
               },
-              {
-                pattern: '(?=.*?[0-9])',
-                message: `One digit`,
-              },
-              {
-                pattern: '(?=.*?[#?!@$%^&*-])',
-                message: `One special character`,
-              },
+              // {
+              //   pattern: '(?=.*?[0-9])',
+              //   message: `One digit`,
+              // },
+              // {
+              //   pattern: '(?=.*?[#?!@$%^&*-])',
+              //   message: `One special character`,
+              // },
             ]}
           >
             <Input.Password />
