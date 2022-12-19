@@ -5,10 +5,10 @@ const Index = ({ courses }) => {
   return (
     <>
       <h1 className='jumbotron text-center bg-primary w-100'>Online School</h1>
-      <div className='container-fluid m-0'>
+      <div className='container-fluid'>
         <div className='row'>
           {courses.map((course) => (
-            <div key={course._id} className='col-md-1'>
+            <div key={course._id} className='col-md-4'>
               <CourseCard course={course} />
             </div>
           ))}

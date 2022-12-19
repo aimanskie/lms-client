@@ -161,7 +161,7 @@ const SingleCourse = () => {
       window.localStorage.setItem('lesson', JSON.stringify(obj))
     }
     let startDuration = JSON.parse(window.localStorage.getItem('lesson'))
-    player.current.seekTo(startDuration[clicked])
+    if (startDuration[clicked] !== 0) player.current.seekTo(startDuration[clicked])
   }
 
   const handleStop = () => {
@@ -203,7 +203,7 @@ const SingleCourse = () => {
             <>
               <div className='col'>
                 <h3 style={{ textAlign: 'center', paddingTop: '20px' }} className='m-0 col'>
-                  {course.lessons[clicked].title.substring(0, 30)}
+                  {course.lessons && course.lessons[clicked] && course.lessons[clicked].title.substring(0, 30)}
                 </h3>
                 <button className='float-right m-0' onClick={markCompleted}>
                   Mark complete and next lesson
@@ -244,7 +244,7 @@ const SingleCourse = () => {
               <ReactMarkdown children={course.lessons[clicked].content} className='single-post' />
             </>
           ) : (
-            <div style={mediaQuery2} onClick={() => setClicked(0)}>
+            <div style={mediaQuery2} onClick={() => setClicked((prev) => prev + 1)}>
               <PlayCircleOutlined />
               <div>Start</div>
             </div>

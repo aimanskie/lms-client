@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { currencyFormatter } from '../../utils/helpers'
 import axios from 'axios'
 
+const { Meta } = Card
+
 const CourseCard = ({ course }) => {
   const [user, setUser] = useState(null)
 

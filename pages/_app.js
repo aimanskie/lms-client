@@ -15,7 +15,7 @@ function MyApp({ Component, pageProps }) {
         <Head>
           <title>LMS</title>
           <meta name='description' content='A simple Online Learning site' />
-          <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+          {/* <meta name='viewport' content='width=device-width, initial-scale=1.0' /> */}
           <meta property='og:title' content='Online Learning' />
           <meta property='og:type' content='website' />
           <meta property='og:url' content='https://www.assohwah.com' />
