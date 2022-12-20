@@ -6,6 +6,7 @@ import { Menu, Button, Drawer } from 'antd'
 import ReactPlayer from 'react-player'
 import ReactMarkdown from 'react-markdown'
 import { PlayCircleOutlined, CheckCircleFilled, MinusCircleFilled, BookOutlined } from '@ant-design/icons'
+import Link from 'next/link'
 
 const SingleCourse = () => {
   const [clicked, setClicked] = useState(-1)
@@ -43,9 +44,6 @@ const SingleCourse = () => {
   }, [course])
 
   const markCompleted = () => {
-    if (completedLessons.includes(course.lessons[clicked]._id)) return cleanUp()
-    if (clicked + 1 === course.lessons.length) setUpdateState(true)
-
     axios
       .post(`/api/mark-completed`, {
         courseId: course._id,
@@ -56,7 +54,11 @@ const SingleCourse = () => {
         cleanUp()
       })
       .catch((err) => console.log(err))
+
+    if (completedLessons.includes(course.lessons[clicked]._id)) cleanUp()
+    if (+clicked + 1 === course.lessons.length) return setUpdateState(true)
   }
+  // console.log(course.lessons, clicked)
 
   const cleanUp = async () => {
     objStore[clicked] = 0
@@ -108,8 +110,12 @@ const SingleCourse = () => {
   }
 
   const handleBtnClick = () => {
-    if (clicked + 1 === course.lessons.length) return setClicked(0)
-    else return setClicked((currentClick) => currentClick + 1)
+    if (+clicked + 1 === course.lessons.length) {
+      setClicked(0)
+      setUpdateState(false)
+      console.log('click same with length')
+      return
+    } else return setClicked((currentClick) => +currentClick + 1)
   }
 
   const handleOpen = () => {
@@ -118,8 +124,8 @@ const SingleCourse = () => {
   console.log(clicked)
   return (
     <StudentRoute>
-      {clicked !== -1 ? (
-        <>
+      {clicked !== -1 && !updateState ? (
+        <div style={{ textAlign: 'center', margin: '0 auto' }}>
           <Lessons
             openDrawer={openDrawer}
             setOpenDrawer={setOpenDrawer}
@@ -128,7 +134,7 @@ const SingleCourse = () => {
             clicked={clicked}
             setClicked={setClicked}
           />
-          <div className='col' style={{ textAlign: 'center', margin: '0 auto' }}>
+          <div className='col'>
             <Button type='primary' onClick={handleOpen} icon={<BookOutlined />} block style={{ width: '50%' }}>
               Press to see all lessons
             </Button>
@@ -158,14 +164,25 @@ const SingleCourse = () => {
             </div>
           )}
           <ReactMarkdown children={course?.lessons?.[clicked]?.content} className='single-post' />
-        </>
+        </div>
       ) : updateState ? (
-        <h1 style={{ color: 'black' }}>Congrats!</h1>
+        <div style={{ marginTop: '40px', textAlign: 'center' }}>
+          <h1>
+            Congrats! This was your last lesson that you watched, you can revise and go through the lessons again. Or
+            you can check out the other courses. Thanks!
+          </h1>
+          <div>
+            <Button onClick={handleBtnClick}>Start Course Again</Button>
+            <Link href='/'>
+              <Button>Go to All Courses</Button>
+            </Link>
+            <Link href='/user/'>
+              <Button>Go to you own courses</Button>
+            </Link>
+          </div>
+        </div>
       ) : (
-        <div
-          onClick={() => setClicked((currentClick) => currentClick + 1)}
-          style={{ fontSize: '5em', textAlign: 'center', padding: 30 }}
-        >
+        <div onClick={handleBtnClick} style={{ fontSize: '5em', textAlign: 'center', margin: '50px' }}>
           <PlayCircleOutlined />
           <div>Start</div>
         </div>

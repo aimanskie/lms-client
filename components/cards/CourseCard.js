@@ -35,7 +35,7 @@ const CourseCard = ({ course }) => {
           </Card>
         </Link>
       ) : (
-        <Link href={`/course/${slug}`}>
+        <Link href={`/course/${slug}`} style={{ textDecoration: 'none' }}>
           <Card
             className='mb-4'
             cover={
