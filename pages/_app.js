@@ -1,5 +1,4 @@
 import TopNav from '../components/TopNav.js'
-import TopNav2 from '../components/TopNav2.js'
 import 'bootstrap/dist/css/bootstrap.min.css'
 // import 'antd/dist/antd.css'
 import '../public/global.css'
