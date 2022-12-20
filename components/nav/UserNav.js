@@ -11,7 +11,7 @@ const UserNav = () => {
   return (
     <div className='nav flex-column nav-pills'>
       <Link href='/user' className={`nav-link ${current === '/user' && 'active'}`}>
-        Dashboard
+        Your Courses
       </Link>
     </div>
   )

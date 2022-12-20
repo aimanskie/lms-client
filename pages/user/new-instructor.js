@@ -3,6 +3,8 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import { Context } from '../../context'
 import { useRouter } from 'next/router'
+import { Button, Form, Input, Space, Typography } from 'antd'
+const { Link } = Typography
 
 const newInstructor = () => {
   const [bankAccount, setBankAccount] = useState('')
@@ -14,6 +16,7 @@ const newInstructor = () => {
   } = useContext(Context)
 
   const router = useRouter()
+  const [form] = Form.useForm()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -39,8 +42,8 @@ const newInstructor = () => {
     <>
       <h1 className='jumbotron text-center bg-primary square'>Become Instructor</h1>
 
-      <div className='container col-md-4 offset-md-4 pb-5'>
-        <form onSubmit={handleSubmit}>
+      {/* <div className='container col-md-4 offset-md-4 pb-5'> */}
+      {/* <form onSubmit={handleSubmit}>
           <input
             type='text'
             className='form-control mb-4 p-4'
@@ -62,8 +65,26 @@ const newInstructor = () => {
           <button type='submit' className='btn btn-block btn-primary' disabled={!bank || !bankAccount}>
             Submit
           </button>
-        </form>
-      </div>
+        </form> */}
+      <Space direction='vertical' align='center'>
+        <Form form={form} name='nest-messages' onFinish={handleSubmit}>
+          <Form.Item name={['user', 'bank']} label='Nama Bank untuk transfer sales'>
+            <Input />
+          </Form.Item>
+          <Form.Item name={['user', 'bankAaccount']} label='Bank Account'>
+            <Input />
+          </Form.Item>
+          <Form.Item>
+            <Button type='primary' htmlType='submit' block>
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+        {/* <Link href='/register'>New user</Link> */}
+        {/* <Link href='/forgot-password'>Forgot password</Link> */}
+      </Space>
+      {/* </div>rd
+       */}
     </>
   )
 }

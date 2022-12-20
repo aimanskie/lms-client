@@ -24,10 +24,7 @@ function MyApp({ Component, pageProps }) {
           <meta property='og:image' content='https://dl.dropbox.com/s/wy8lx81marbnriv/DR%20ATIYAH.png?dl=0' />
           <meta name='Atiyah Azmi' content='LMS' />
           <link rel='icon' href='/favicon.png' />
-          {/* <link rel='icon' href='/favicon.svg' type='image/svg+xml' /> */}
-          {/* <link rel='apple-touch-icon' href='/apple-touch-icon.png' /> */}
         </Head>
-        {/* <TopNav2 /> */}
         <TopNav />
         <Component {...pageProps} />
       </Layout>

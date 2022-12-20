@@ -26,10 +26,13 @@ const TopNav = () => {
     dispatch,
   } = useContext(Context)
   const router = useRouter()
+  const { slug } = router.query
 
   useEffect(() => {
     process.browser && setCurrent(window.location.pathname)
   }, [process.browser && window.location.pathname])
+
+  console.log(current)
 
   useEffect(() => {
     function handleResize() {
@@ -67,52 +70,52 @@ const TopNav = () => {
     toast.success(data.message)
     router.push('/login')
   }
-
+  // console.log(`/user/course/${slug}`)
   return (
     <Menu theme='dark' mode='horizontal' selectedKeys={[current]} className='mb-0'>
-      <Item key='/' onClick={(e) => setCurrent(e.key)} icon={<AppstoreOutlined />} className='lms-name'>
+      <Item key='/' onClick={(e) => setCurrent(e.key)} icon={<AppstoreOutlined />}>
         {/* <Tooltip title='Home'> */}
         <Link href='/'>
-          <span className='text' style={mediaStyle}>
-            LMS
-          </span>
+          <span style={mediaStyle}>All Courses</span>
         </Link>
         {/* </Tooltip> */}
       </Item>
       <div className='home-icon'>
-        {user && user.role && (user.role.includes('Admin') || user.role.includes('Instructor')) ? (
-          <Item
-            key='/instructor/course/create'
-            onClick={(e) => setCurrent(e.key)}
-            icon={<CarryOutOutlined />}
-            tooltip='become instructor'
-          >
-            {/* <Tooltip title='Create Course'> */}
-            <Link href='/instructor/course/create'>
-              <span className='text' style={mediaStyle}>
-                Create Course
-              </span>
-            </Link>
-            {/* </Tooltip> */}
-          </Item>
-        ) : user !== null ? (
+        {
+          user?.role?.includes('Admin') || user?.role?.includes('Instructor') ? (
+            <Item
+              key='/instructor/course/create'
+              onClick={(e) => setCurrent(e.key)}
+              icon={<CarryOutOutlined />}
+              tooltip='become instructor'
+            >
+              {/* <Tooltip title='Create Course'> */}
+              <Link href='/instructor/course/create'>
+                <span className='text' style={mediaStyle}>
+                  Create Course
+                </span>
+              </Link>
+              {/* </Tooltip> */}
+            </Item>
+          ) : (
+            <div></div>
+          )
+          /* user !== null ? (
           <Item
             key='/user/new-instructor'
             onClick={(e) => setCurrent(e.key)}
             icon={<TeamOutlined />}
             tooltip='become instructor'
           >
-            {/* <Tooltip title='Become Instructor'> */}
             <Link href='/user/new-instructor'>
               <span className='text' style={mediaStyle}>
                 Become Instructor
               </span>
             </Link>
-            {/* </Tooltip> */}
-          </Item>
-        ) : (
-          <Item></Item>
-        )}
+            {/* </Tooltip> */
+        }
+        {/* </Item> */}
+        {/* )   */}
 
         {user === null && (
           <>
@@ -137,7 +140,7 @@ const TopNav = () => {
           </>
         )}
 
-        {user && user.role && (user.role.includes('Admin') || user.role.includes('Instructor')) && (
+        {user?.role?.includes('Admin') || user?.role?.includes('Instructor') ? (
           <Item key='/instructor' onClick={(e) => setCurrent(e.key)} icon={<TeamOutlined />}>
             {/* <Tooltip title='Instructor'> */}
             <Link href='/instructor'>
@@ -147,17 +150,19 @@ const TopNav = () => {
             </Link>
             {/* </Tooltip> */}
           </Item>
+        ) : (
+          <div></div>
         )}
 
         {user !== null && (
-          <SubMenu icon={<CoffeeOutlined />} title={user && user.name} style={mediaStyle}>
-            <ItemGroup>
-              <Item key='/user'>
-                <Link href='/user'>Dashboard</Link>
-              </Item>
+          <div style={mediaStyle}>
+            <Item key='/user'>
+              <Link href='/user'>Your Courses</Link>
+            </Item>
+            <SubMenu icon={<CoffeeOutlined />} title={user?.name}>
               <Item onClick={logout}>Logout</Item>
-            </ItemGroup>
-          </SubMenu>
+            </SubMenu>
+          </div>
         )}
       </div>
     </Menu>
