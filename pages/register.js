@@ -1,5 +1,5 @@
 import { useEffect, useContext } from 'react'
-import { Button, Form, Input, InputNumber, Space, Typography } from 'antd'
+import { Button, Form, Input, Space, Typography } from 'antd'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { Context } from '../context'
@@ -39,13 +39,10 @@ const Register = () => {
         email,
         password,
       })
-      // const {token} = data
-      // await axios(`api/register?${token}`)
-      // if(data.token)
       if (!data.ok) throw Error
       toast('Please check email for confirmation to complete registration')
       form.resetFields()
-      // router.push('/login')
+      router.push('/login')
     } catch (err) {
       toast.error(err.response.data)
     }

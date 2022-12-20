@@ -7,10 +7,6 @@ import { Button, Form, Input, Space, Typography } from 'antd'
 const { Link } = Typography
 
 const Login = () => {
-  const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 8 },
-  }
 
   const {
     state: { user },

@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
-import { Context } from '../../context'
+import { useEffect, useState } from 'react'
 import UserRoute from '../../components/routes/UserRoute.js'
 import axios from 'axios'
 import { Avatar } from 'antd'
@@ -7,35 +6,29 @@ import Link from 'next/link'
 import { SyncOutlined, PlayCircleOutlined } from '@ant-design/icons'
 
 const UserIndex = () => {
-  const {
-    state: { user },
-  } = useContext(Context)
   const [courses, setCourses] = useState([])
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    loadCourses()
+    setLoading(true)
+    axios('/api/user-courses')
+      .then((res) => {
+        setCourses(res.data)
+        setLoading(false)
+      })
+      .catch((err) => {
+        console.log(err)
+        setLoading(false)
+      })
   }, [])
 
-  const loadCourses = async () => {
-    try {
-      setLoading(true)
-      const { data } = await axios.get('/api/user-courses')
-      setCourses(data)
-      setLoading(false)
-    } catch (err) {
-      console.log(err)
-      setLoading(false)
-    }
-  }
-
   return (
-    <UserRoute>
-      {loading && <SyncOutlined spin className='d-flex justify-content-center display-1 text-danger p-5' />}
-      <h1 className='jumbotron text-center square w-100'>User dashboard</h1>
+    <>
+      <UserRoute>
+        {loading && <SyncOutlined spin className='d-flex justify-content-center display-1 text-danger p-5' />}
+        <h1 className='jumbotron text-center square w-100'>User dashboard</h1>
 
-      {courses &&
-        courses.map((course) => (
+        {courses?.map((course) => (
           <div key={course._id} className='media pt-2 pb-1'>
             <Avatar size={80} shape='square' src={course.image ? course.image.Location : '/course.png'} />
 
@@ -58,7 +51,8 @@ const UserIndex = () => {
             </Link>
           </div>
         ))}
-    </UserRoute>
+      </UserRoute>
+    </>
   )
 }
 

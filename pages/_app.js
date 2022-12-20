@@ -12,10 +12,11 @@ function MyApp({ Component, pageProps }) {
   return (
     <Provider>
       <Layout>
+        <ToastContainer position='bottom-right' autoClose={2500} hideProgressBar={true} />
         <Head>
           <title>LMS</title>
           <meta name='description' content='A simple Online Learning site' />
-          {/* <meta name='viewport' content='width=device-width, initial-scale=1.0' /> */}
+          <meta name='viewport' content='width=device-width, initial-scale=1.0' />
           <meta property='og:title' content='Online Learning' />
           <meta property='og:type' content='website' />
           <meta property='og:url' content='https://www.assohwah.com' />
@@ -26,7 +27,6 @@ function MyApp({ Component, pageProps }) {
           {/* <link rel='icon' href='/favicon.svg' type='image/svg+xml' /> */}
           {/* <link rel='apple-touch-icon' href='/apple-touch-icon.png' /> */}
         </Head>
-        <ToastContainer position='top-center' autoClose={2500} hideProgressBar={true} />
         <TopNav />
         <Component {...pageProps} />
       </Layout>
