@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react'
-import { Menu, Tooltip } from 'antd'
+import { Menu } from 'antd'
 import Link from 'next/link'
 import {
   AppstoreOutlined,
@@ -31,14 +31,6 @@ const TopNav = () => {
     process.browser && setCurrent(window.location.pathname)
   }, [process.browser && window.location.pathname])
 
-  const logout = async () => {
-    dispatch({ type: 'LOGOUT' })
-    window.localStorage.removeItem('user')
-    const { data } = await axios.get('/api/logout')
-    toast(data.message)
-    router.push('/login')
-  }
-
   useEffect(() => {
     function handleResize() {
       setWindowSize({
@@ -67,6 +59,15 @@ const TopNav = () => {
         fontSize: '19px',
       })
   }, [windowSize])
+
+  const logout = async () => {
+    dispatch({ type: 'LOGOUT' })
+    window.localStorage.removeItem('user')
+    const { data } = await axios.get('/api/logout')
+    toast.success(data.message)
+    router.push('/login')
+  }
+
   return (
     <Menu theme='dark' mode='horizontal' selectedKeys={[current]} className='mb-0'>
       <Item key='/' onClick={(e) => setCurrent(e.key)} icon={<AppstoreOutlined />} className='lms-name'>

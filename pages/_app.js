@@ -1,4 +1,5 @@
 import TopNav from '../components/TopNav.js'
+import TopNav2 from '../components/TopNav2.js'
 import 'bootstrap/dist/css/bootstrap.min.css'
 // import 'antd/dist/antd.css'
 import '../public/global.css'
@@ -12,7 +13,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <Provider>
       <Layout>
-        <ToastContainer position='bottom-right' autoClose={2500} hideProgressBar={true} />
+        <ToastContainer position='top-right' autoClose={2500} hideProgressBar={true} theme={'dark'} />
         <Head>
           <title>LMS</title>
           <meta name='description' content='A simple Online Learning site' />
@@ -27,6 +28,7 @@ function MyApp({ Component, pageProps }) {
           {/* <link rel='icon' href='/favicon.svg' type='image/svg+xml' /> */}
           {/* <link rel='apple-touch-icon' href='/apple-touch-icon.png' /> */}
         </Head>
+        {/* <TopNav2 /> */}
         <TopNav />
         <Component {...pageProps} />
       </Layout>

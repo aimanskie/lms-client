@@ -40,7 +40,7 @@ const Register = () => {
         password,
       })
       if (!data.ok) throw Error
-      toast('Please check email for confirmation to complete registration')
+      toast.success('Please check email for confirmation to complete registration')
       form.resetFields()
       router.push('/login')
     } catch (err) {

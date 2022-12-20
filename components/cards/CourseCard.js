@@ -8,34 +8,23 @@ const { Meta } = Card
 
 const CourseCard = ({ course }) => {
   const [user, setUser] = useState(null)
-
   const { _id: id, name, instructor, price, image, slug, paid, category } = course
 
   useEffect(() => {
-    storageWindow()
-  }, [])
-
-  const storageWindow = async () => {
     const user2 = JSON.parse(window.localStorage.getItem('user'))
     if (user2) {
-      const user1 = await axios(`/api/current-user1?id=${user2._id}`)
-      setUser(user1.data)
+      axios(`/api/current-user1?id=${user2._id}`).then((res) => setUser(res.data))
     }
-  }
+  }, [])
 
   return (
     <>
-      {user && user.courses && user.courses.includes(id) ? (
-        <Link href={`/user/course/${slug}`}>
+      {user?.courses?.includes(id) ? (
+        <Link href={`/user/course/${slug}`} style={{ textDecoration: 'none' }}>
           <Card
             className='mb-4'
             cover={
-              <img
-                src={image && image.Location}
-                alt={name}
-                style={{ height: '200px', objectFit: 'cover' }}
-                className='p-1'
-              />
+              <img src={image?.Location} alt={name} style={{ height: '200px', objectFit: 'cover' }} className='p-1' />
             }
           >
             <h2 className='font-weight-bold'>{name}</h2>
@@ -50,12 +39,7 @@ const CourseCard = ({ course }) => {
           <Card
             className='mb-4'
             cover={
-              <img
-                src={image && image.Location}
-                alt={name}
-                style={{ height: '200px', objectFit: 'cover' }}
-                className='p-1'
-              />
+              <img src={image?.Location} alt={name} style={{ height: '200px', objectFit: 'cover' }} className='p-1' />
             }
           >
             <h2 className='font-weight-bold'>{name}</h2>
