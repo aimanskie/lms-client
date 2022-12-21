@@ -51,14 +51,11 @@ const SingleCourse = () => {
       })
       .then(() => {
         setCompletedLessons((prevData) => [...prevData, course.lessons[clicked]._id])
+        if (+clicked + 1 === course.lessons.length) return setUpdateState(true)
         cleanUp()
       })
       .catch((err) => console.log(err))
-
-    if (completedLessons.includes(course.lessons[clicked]._id)) cleanUp()
-    if (+clicked + 1 === course.lessons.length) return setUpdateState(true)
   }
-  // console.log(course.lessons, clicked)
 
   const cleanUp = async () => {
     objStore[clicked] = 0
@@ -113,7 +110,6 @@ const SingleCourse = () => {
     if (+clicked + 1 === course.lessons.length) {
       setClicked(0)
       setUpdateState(false)
-      console.log('click same with length')
       return
     } else return setClicked((currentClick) => +currentClick + 1)
   }
@@ -121,7 +117,6 @@ const SingleCourse = () => {
   const handleOpen = () => {
     setOpenDrawer(true)
   }
-  console.log(clicked)
   return (
     <StudentRoute>
       {clicked !== -1 && !updateState ? (
@@ -216,7 +211,10 @@ const Lessons = ({ openDrawer, setOpenDrawer, course, completedLessons, clicked,
         style={{ backgroundColor: 'darkgrey' }}
       >
         <Button type='primary' block>
-          {((completedLessons?.length / course?.lessons?.length) * 100).toFixed(0)}% Complete
+          {completedLessons?.length <= course?.lessons?.length
+            ? ((completedLessons?.length / course?.lessons?.length) * 100).toFixed(0)
+            : ((course?.lessons?.length / course?.lessons?.length) * 100).toFixed(0)}
+          % Complete
         </Button>
         <Menu selectedKeys={[clicked]} items={items} onClick={handleClick} mode='vertical'></Menu>
       </Drawer>

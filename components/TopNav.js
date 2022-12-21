@@ -81,41 +81,34 @@ const TopNav = () => {
         {/* </Tooltip> */}
       </Item>
       <div className='home-icon'>
-        {
-          user?.role?.includes('Admin') || user?.role?.includes('Instructor') ? (
-            <Item
-              key='/instructor/course/create'
-              onClick={(e) => setCurrent(e.key)}
-              icon={<CarryOutOutlined />}
-              tooltip='become instructor'
-            >
-              {/* <Tooltip title='Create Course'> */}
+        {user?.role?.includes('Instructor') && (
+          <>
+            <Item key='/instructor/course/create' onClick={(e) => setCurrent(e.key)} icon={<CarryOutOutlined />}>
               <Link href='/instructor/course/create'>
                 <span className='text' style={mediaStyle}>
                   Create Course
                 </span>
               </Link>
-              {/* </Tooltip> */}
             </Item>
-          ) : (
-            <div></div>
-          )
-          /* user !== null ? (
-          <Item
-            key='/user/new-instructor'
-            onClick={(e) => setCurrent(e.key)}
-            icon={<TeamOutlined />}
-            tooltip='become instructor'
-          >
-            <Link href='/user/new-instructor'>
-              <span className='text' style={mediaStyle}>
-                Become Instructor
-              </span>
-            </Link>
-            {/* </Tooltip> */
-        }
-        {/* </Item> */}
-        {/* )   */}
+            <Item key='/instructor' onClick={(e) => setCurrent(e.key)} icon={<TeamOutlined />}>
+              <Link href='/instructor'>
+                <span className='text' style={mediaStyle}>
+                  Instructor
+                </span>
+              </Link>
+            </Item>
+            {/* {user !== null && ( */}
+            {/* <div style={mediaStyle}> */}
+            <Item key='/user' style={mediaStyle}>
+              <Link href='/user'>Your Courses</Link>
+            </Item>
+            <SubMenu icon={<CoffeeOutlined />} title={user?.name} style={mediaStyle}>
+              <Item onClick={logout}>Logout</Item>
+            </SubMenu>
+            {/* </div> */}
+            {/* )} */}
+          </>
+        )}
 
         {user === null && (
           <>
@@ -126,43 +119,15 @@ const TopNav = () => {
                   Login
                 </span>
               </Link>
-              {/* </Tooltip> */}
             </Item>
             <Item key='/register' onClick={(e) => setCurrent(e.key)} icon={<UserAddOutlined />}>
-              {/* <Tooltip title='Register'> */}
               <Link href='/register'>
                 <span className='text' style={mediaStyle}>
                   Register
                 </span>
               </Link>
-              {/* </Tooltip> */}
             </Item>
           </>
-        )}
-
-        {user?.role?.includes('Admin') || user?.role?.includes('Instructor') ? (
-          <Item key='/instructor' onClick={(e) => setCurrent(e.key)} icon={<TeamOutlined />}>
-            {/* <Tooltip title='Instructor'> */}
-            <Link href='/instructor'>
-              <span className='text' style={mediaStyle}>
-                Instructor
-              </span>
-            </Link>
-            {/* </Tooltip> */}
-          </Item>
-        ) : (
-          <div></div>
-        )}
-
-        {user !== null && (
-          <div style={mediaStyle}>
-            <Item key='/user'>
-              <Link href='/user'>Your Courses</Link>
-            </Item>
-            <SubMenu icon={<CoffeeOutlined />} title={user?.name}>
-              <Item onClick={logout}>Logout</Item>
-            </SubMenu>
-          </div>
         )}
       </div>
     </Menu>
