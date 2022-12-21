@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react'
-import { Menu } from 'antd'
+import { Menu, Tooltip } from 'antd'
 import Link from 'next/link'
 import {
   AppstoreOutlined,
@@ -8,6 +8,8 @@ import {
   UserAddOutlined,
   CarryOutOutlined,
   TeamOutlined,
+  VerticalLeftOutlined,
+  LogoutOutlined,
 } from '@ant-design/icons'
 import { Context } from '../context'
 import axios from 'axios'
@@ -32,8 +34,6 @@ const TopNav = () => {
     process.browser && setCurrent(window.location.pathname)
   }, [process.browser && window.location.pathname])
 
-  console.log(current)
-
   useEffect(() => {
     function handleResize() {
       setWindowSize({
@@ -47,17 +47,17 @@ const TopNav = () => {
   }, [])
 
   useEffect(() => {
-    if (windowSize.width < 800) {
+    if (windowSize.width < 900) {
       setMediaStyle({
         fontSize: '12px',
       })
     }
-    if (windowSize.width < 390) {
+    if (windowSize.width < 560) {
       setMediaStyle({
         fontSize: '0px',
       })
     }
-    if (windowSize.width > 800)
+    if (windowSize.width > 900)
       setMediaStyle({
         fontSize: '19px',
       })
@@ -70,64 +70,73 @@ const TopNav = () => {
     toast.success(data.message)
     router.push('/login')
   }
-  // console.log(`/user/course/${slug}`)
+
   return (
     <Menu theme='dark' mode='horizontal' selectedKeys={[current]} className='mb-0'>
       <Item key='/' onClick={(e) => setCurrent(e.key)} icon={<AppstoreOutlined />}>
-        {/* <Tooltip title='Home'> */}
-        <Link href='/'>
-          <span style={mediaStyle}>All Courses</span>
-        </Link>
-        {/* </Tooltip> */}
+        <Tooltip title='All Courses' arrowPointAtCenter>
+          <Link href='/'>
+            <span style={mediaStyle}>All Courses</span>
+          </Link>
+        </Tooltip>
       </Item>
       <div className='home-icon'>
         {user?.role?.includes('Instructor') && (
           <>
             <Item key='/instructor/course/create' onClick={(e) => setCurrent(e.key)} icon={<CarryOutOutlined />}>
-              <Link href='/instructor/course/create'>
-                <span className='text' style={mediaStyle}>
-                  Create Course
-                </span>
-              </Link>
+              <Tooltip title='Create Courses' arrowPointAtCenter>
+                <Link href='/instructor/course/create'>
+                  <span className='text' style={mediaStyle}>
+                    Create Course
+                  </span>
+                </Link>
+              </Tooltip>
             </Item>
             <Item key='/instructor' onClick={(e) => setCurrent(e.key)} icon={<TeamOutlined />}>
-              <Link href='/instructor'>
-                <span className='text' style={mediaStyle}>
-                  Instructor
-                </span>
-              </Link>
+              <Tooltip title='Instructor' arrowPointAtCenter>
+                <Link href='/instructor'>
+                  <span className='text' style={mediaStyle}>
+                    Instructor
+                  </span>
+                </Link>
+              </Tooltip>
             </Item>
           </>
         )}
         {user !== null && (
           <>
-            {/* <div style={mediaStyle}> */}
-            <Item key='/user' style={mediaStyle}>
-              <Link href='/user'>Your Courses</Link>
+            <Item key='/user' style={mediaStyle} icon={<VerticalLeftOutlined />}>
+              <Tooltip title='My Courses' arrowPointAtCenter>
+                <Link href='/user'>My Courses</Link>
+              </Tooltip>
             </Item>
             <SubMenu icon={<CoffeeOutlined />} title={user?.name} style={mediaStyle}>
-              <Item onClick={logout}>Logout</Item>
+              <Item onClick={logout} icon={<LogoutOutlined />}>
+                Logout
+              </Item>
             </SubMenu>
-            {/* </div> */}
           </>
         )}
 
         {user === null && (
           <>
             <Item key='/login' onClick={(e) => setCurrent(e.key)} icon={<LoginOutlined />}>
-              {/* <Tooltip title='Login'> */}
-              <Link href='/login'>
-                <span className='text' style={mediaStyle}>
-                  Login
-                </span>
-              </Link>
+              <Tooltip title='Login' arrowPointAtCenter>
+                <Link href='/login'>
+                  <span className='text' style={mediaStyle}>
+                    Login
+                  </span>
+                </Link>
+              </Tooltip>
             </Item>
             <Item key='/register' onClick={(e) => setCurrent(e.key)} icon={<UserAddOutlined />}>
-              <Link href='/register'>
-                <span className='text' style={mediaStyle}>
-                  Register
-                </span>
-              </Link>
+              <Tooltip title='Register' arrowPointAtCenter>
+                <Link href='/register'>
+                  <span className='text' style={mediaStyle}>
+                    Register
+                  </span>
+                </Link>
+              </Tooltip>
             </Item>
           </>
         )}
