@@ -29,12 +29,12 @@ const newInstructor = () => {
         type: 'LOGIN',
         payload: data,
       })
-      toast('Registration Instructor successful')
+      toast.success('Registration Instructor successful')
       setBankAccount('')
       setBank('')
       router.push('/instructor')
     } catch (err) {
-      toast(err.response.data)
+      toast.error(err.response.data)
     }
   }
 

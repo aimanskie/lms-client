@@ -24,11 +24,10 @@ const CourseEdit = () => {
   })
   const [image, setImage] = useState({})
   const [preview, setPreview] = useState('')
-  const [uploadButtonText, setUploadButtonText] = useState('Upload Image (5MB Max Size)')
-
+  const [uploadButtonText, setUploadButtonText] = useState('')
   const [visible, setVisible] = useState(false)
   const [current, setCurrent] = useState({})
-  const [uploadVideoButtonText, setUploadVideoButtonText] = useState('Upload Video (Format MP4, 200MB Max Size)')
+  const [uploadVideoButtonText, setUploadVideoButtonText] = useState('')
   const [progress, setProgress] = useState(0)
   const [uploading, setUploading] = useState(false)
 
@@ -42,7 +41,7 @@ const CourseEdit = () => {
   const loadCourse = async () => {
     const { data } = await axios.get(`/api/course/${slug}`)
     if (data) setValues(data)
-    if (data && data.image) setImage(data.image)
+    if (data?.image) setImage(data.image)
   }
 
   const handleChange = (e) => {
@@ -65,7 +64,7 @@ const CourseEdit = () => {
       } catch (err) {
         console.log(err)
         setValues({ ...values, loading: false })
-        toast('Image upload failed. Try later.')
+        toast.error('Image upload failed. Try later.')
       }
     })
   }
@@ -81,7 +80,7 @@ const CourseEdit = () => {
     } catch (err) {
       console.log(err)
       setValues({ ...values, loading: false })
-      toast('Image upload failed. Try later.')
+      toast.error('Image upload failed. Try later.')
     }
   }
 
@@ -92,12 +91,12 @@ const CourseEdit = () => {
         ...values,
         image,
       })
-      toast('Course updated!')
+      toast.success('Course updated!')
       setTimeout(() => {
         router.back()
       }, 2000)
     } catch (err) {
-      toast(err.response.data)
+      toast.error(err.response.data)
     }
   }
 
@@ -119,7 +118,7 @@ const CourseEdit = () => {
       ...values,
       image,
     })
-    toast('Lessons rearranged successfully')
+    toast.success('Lessons rearranged successfully')
   }
 
   const handleDelete = async (index) => {
@@ -167,7 +166,7 @@ const CourseEdit = () => {
       const index = arr.findIndex((el) => el._id === current._id)
       arr[index] = current
       setValues({ ...values, lessons: arr })
-      toast('Lesson updated')
+      toast.success('Lesson updated')
     }
   }
 

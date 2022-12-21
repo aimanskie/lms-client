@@ -209,6 +209,7 @@ const Lessons = ({ openDrawer, setOpenDrawer, course, completedLessons, clicked,
         placement='left'
         onClose={() => setOpenDrawer(false)}
         style={{ backgroundColor: 'darkgrey' }}
+        width={500}
       >
         <Button type='primary' block>
           {completedLessons?.length <= course?.lessons?.length

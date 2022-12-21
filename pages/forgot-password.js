@@ -28,9 +28,9 @@ const ForgotPassword = () => {
     try {
       const { data } = await axios.post('/api/forgot-password', { email })
       setSuccess(true)
-      toast('Check your email for the secret code')
+      toast.success('Check your email for the secret code')
     } catch (err) {
-      toast(err.response.data)
+      toast.error(err.response.data)
     }
   }
 
@@ -42,11 +42,11 @@ const ForgotPassword = () => {
         code,
         newPassword,
       })
-      toast('Great! Now you can login with your new password')
+      toast.success('Great! Now you can login with your new password')
       form.resetFields()
       router.push('/login')
     } catch (err) {
-      toast(err.response.data)
+      toast.error(err.response.data)
     }
   }
 

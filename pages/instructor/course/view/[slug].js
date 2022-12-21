@@ -61,10 +61,10 @@ const CourseView = () => {
       setUploadButtonText('Upload video')
       setVisible(false)
       setCourse(data)
-      toast('Lesson added')
+      toast.success('Lesson added')
     } catch (err) {
       console.log(err)
-      toast('Lesson add failed')
+      toast.error('Lesson add failed')
     }
   }
 
@@ -86,7 +86,7 @@ const CourseView = () => {
     } catch (err) {
       console.log(err)
       setUploading(false)
-      toast('Video upload failed')
+      toast.error('Video upload failed')
     }
   }
 
@@ -100,7 +100,7 @@ const CourseView = () => {
     } catch (err) {
       console.log(err)
       setUploading(false)
-      toast('Video remove failed')
+      toast.error('Video remove failed')
     }
   }
 
@@ -112,9 +112,9 @@ const CourseView = () => {
       if (!answer) return
       const { data } = await axios.put(`/api/course/publish/${courseId}`)
       setCourse(data)
-      toast('Congrats! Your course is live')
+      toast.success('Congrats! Your course is live')
     } catch (err) {
-      toast('Course publish failed. Try again')
+      toast.error('Course publish failed. Try again')
     }
   }
 
@@ -124,9 +124,9 @@ const CourseView = () => {
       if (!answer) return
       const { data } = await axios.put(`/api/course/unpublish/${courseId}`)
       setCourse(data)
-      toast('Your course is unpublished')
+      toast.success('Your course is unpublished')
     } catch (err) {
-      toast('Course publish failed. Try again')
+      toast.error('Course publish failed. Try again')
     }
   }
 

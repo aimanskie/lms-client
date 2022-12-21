@@ -7,7 +7,6 @@ import { Button, Form, Input, Space, Typography } from 'antd'
 const { Link } = Typography
 
 const Login = () => {
-
   const {
     state: { user },
     dispatch,
@@ -41,7 +40,7 @@ const Login = () => {
       form.resetFields()
       router.push('/user')
     } catch (err) {
-      toast(err.response.data)
+      toast.error(err.response.data)
     }
   }
 

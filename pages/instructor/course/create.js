@@ -41,7 +41,7 @@ const CourseCreate = () => {
       } catch (err) {
         console.log(err)
         setValues({ ...values, loading: false })
-        toast('Image upload failed. Try later.')
+        toast.error('Image upload failed. Try later.')
       }
     })
   }
@@ -57,7 +57,7 @@ const CourseCreate = () => {
     } catch (err) {
       console.log(err)
       setValues({ ...values, loading: false })
-      toast('Image upload failed. Try later.')
+      toast.error('Image upload failed. Try later.')
     }
   }
 
@@ -73,7 +73,7 @@ const CourseCreate = () => {
         router.push('/instructor')
       }, 1500)
     } catch (err) {
-      toast(err.response.data)
+      toast.error(err.response.data)
     }
   }
 

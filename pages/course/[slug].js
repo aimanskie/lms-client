@@ -13,7 +13,7 @@ const SingleCourse = ({ course }) => {
   const [preview, setPreview] = useState('')
   const [loading, setLoading] = useState(false)
   const [enrolled, setEnrolled] = useState({})
-  
+
   const {
     state: { user },
   } = useContext(Context)
@@ -39,7 +39,7 @@ const SingleCourse = ({ course }) => {
       const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY)
       stripe.redirectToCheckout({ sessionId: data })
     } catch (err) {
-      toast('Enrollment failed, try again.')
+      toast.error('Enrollment failed, try again.')
       console.log(err)
       setLoading(false)
     }
@@ -52,11 +52,11 @@ const SingleCourse = ({ course }) => {
       if (enrolled.status) return router.push(`/user/course/${enrolled.course.slug}`)
       setLoading(true)
       const { data } = await axios.post(`/api/free-enrollment/${course._id}`)
-      toast(data.message)
+      toast.success(data.message)
       setLoading(false)
       router.push(`/user/course/${data.course.slug}`)
     } catch (err) {
-      toast('Enrollment failed. Try again.')
+      toast.error('Enrollment failed. Try again.')
       console.log(err)
       setLoading(false)
     }
