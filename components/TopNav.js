@@ -97,7 +97,10 @@ const TopNav = () => {
                 </span>
               </Link>
             </Item>
-            {/* {user !== null && ( */}
+          </>
+        )}
+        {user !== null && (
+          <>
             {/* <div style={mediaStyle}> */}
             <Item key='/user' style={mediaStyle}>
               <Link href='/user'>Your Courses</Link>
@@ -106,7 +109,6 @@ const TopNav = () => {
               <Item onClick={logout}>Logout</Item>
             </SubMenu>
             {/* </div> */}
-            {/* )} */}
           </>
         )}
 
