@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps }) {
           <meta name='Atiyah Azmi' content='LMS' />
           <link rel='icon' href='/favicon.png' />
         </Head>
-        <TopNav />
+        <TopNav style={{ width: '100%' }} />
         <Component {...pageProps} />
       </Layout>
     </Provider>
