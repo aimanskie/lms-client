@@ -20,6 +20,7 @@ const SingleCourse = () => {
   const router = useRouter()
   const { slug } = router.query
   const player = useRef()
+  const { windowSize } = useContext(Context)
 
   useEffect(() => {
     if (slug) {
@@ -119,8 +120,6 @@ const SingleCourse = () => {
     setOpenDrawer(true)
   }
 
-  // console.log(windowSize)
-
   return (
     <StudentRoute>
       {clicked !== -1 && !updateState ? (
@@ -132,9 +131,16 @@ const SingleCourse = () => {
             completedLessons={completedLessons}
             clicked={clicked}
             setClicked={setClicked}
+            windowSize={windowSize}
           />
           <div className='col'>
-            <Button type='primary' onClick={handleOpen} icon={<BookOutlined />} block style={{ width: '50%' }}>
+            <Button
+              type='primary'
+              onClick={handleOpen}
+              icon={<BookOutlined />}
+              block
+              style={windowSize.width < 600 ? { width: '50%', fontSize: 10 } : { width: '50%' }}
+            >
               Press to see all lessons
             </Button>
             <h3 style={{ marginTop: 20 }}>{course?.lessons?.[clicked]?.title?.substring(0, 30)}</h3>
@@ -190,7 +196,7 @@ const SingleCourse = () => {
   )
 }
 
-const Lessons = ({ openDrawer, setOpenDrawer, course, completedLessons, clicked, setClicked }) => {
+const Lessons = ({ openDrawer, setOpenDrawer, course, completedLessons, clicked, setClicked, windowSize }) => {
   const items = course.lessons.map((lesson, index) => {
     return {
       label: lesson.title,
@@ -203,9 +209,10 @@ const Lessons = ({ openDrawer, setOpenDrawer, course, completedLessons, clicked,
     }
   })
 
-  const { windowSize } = useContext(Context)
-
-  const handleClick = (e) => setClicked(e.key)
+  const handleClick = (e) => {
+    setClicked(e.key)
+    setOpenDrawer(false)
+  }
 
   return (
     <div>
