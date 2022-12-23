@@ -21,6 +21,23 @@ const rootReducer = (state, action) => {
 
 const Provider = ({ children }) => {
   const [state, dispatch] = useReducer(rootReducer, intialState)
+  const [windowSize, setWindowSize] = useState({
+    width: undefined,
+    height: undefined,
+  })
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      })
+    }
+    window.addEventListener('resize', handleResize)
+    handleResize()
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   const router = useRouter()
 
   useEffect(() => {
@@ -67,7 +84,7 @@ const Provider = ({ children }) => {
   const value = {
     state,
     dispatch,
-    // user,
+    windowSize,
   }
 
   return <Context.Provider value={value}>{children}</Context.Provider>

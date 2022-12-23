@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useContext } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
 import StudentRoute from '../../../components/routes/StudentRoute.js'
@@ -7,6 +7,7 @@ import ReactPlayer from 'react-player'
 import ReactMarkdown from 'react-markdown'
 import { PlayCircleOutlined, CheckCircleFilled, MinusCircleFilled, BookOutlined } from '@ant-design/icons'
 import Link from 'next/link'
+import { Context } from '../../../context/index.js'
 
 const SingleCourse = () => {
   const [clicked, setClicked] = useState(-1)
@@ -117,6 +118,9 @@ const SingleCourse = () => {
   const handleOpen = () => {
     setOpenDrawer(true)
   }
+
+  // console.log(windowSize)
+
   return (
     <StudentRoute>
       {clicked !== -1 && !updateState ? (
@@ -199,6 +203,8 @@ const Lessons = ({ openDrawer, setOpenDrawer, course, completedLessons, clicked,
     }
   })
 
+  const { windowSize } = useContext(Context)
+
   const handleClick = (e) => setClicked(e.key)
 
   return (
@@ -209,7 +215,7 @@ const Lessons = ({ openDrawer, setOpenDrawer, course, completedLessons, clicked,
         placement='left'
         onClose={() => setOpenDrawer(false)}
         style={{ backgroundColor: 'darkgrey' }}
-        width={500}
+        width={windowSize.width < 600 ? '100%' : '50%'}
       >
         <Button type='primary' block>
           {completedLessons?.length <= course?.lessons?.length

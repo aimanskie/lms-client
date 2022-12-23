@@ -20,9 +20,8 @@ const { Item, SubMenu, ItemGroup } = Menu
 
 const TopNav = () => {
   const [current, setCurrent] = useState('')
-  const [windowSize, setWindowSize] = useState({ width: undefined, height: undefined })
   const [mediaStyle, setMediaStyle] = useState({})
-
+  const { windowSize } = useContext(Context)
   const {
     state: { user },
     dispatch,
@@ -33,18 +32,6 @@ const TopNav = () => {
   useEffect(() => {
     process.browser && setCurrent(window.location.pathname)
   }, [process.browser && window.location.pathname])
-
-  useEffect(() => {
-    function handleResize() {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      })
-    }
-    window.addEventListener('resize', handleResize)
-    handleResize()
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
 
   useEffect(() => {
     if (windowSize.width < 900) {
@@ -107,7 +94,7 @@ const TopNav = () => {
           <>
             <Item key='/user' style={mediaStyle} icon={<VerticalLeftOutlined />}>
               <Tooltip title='My Courses' arrowPointAtCenter>
-                <Link href='/user'>My Courses</Link>
+                <Link href='/user'>Enrolled Courses</Link>
               </Tooltip>
             </Item>
             <SubMenu icon={<CoffeeOutlined />} title={user?.name} style={mediaStyle}>
