@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 import InstructorRoute from '../../../../components/routes/InstructorRoute.js'
 import axios from 'axios'
@@ -9,100 +9,27 @@ import {
   UploadOutlined,
   QuestionOutlined,
   CloseOutlined,
-  UserSwitchOutlined,
 } from '@ant-design/icons'
 import ReactMarkdown from 'react-markdown'
 import AddLessonForm from '../../../../components/forms/AddLessonForm.js'
 import { toast } from 'react-toastify'
 import Item from 'antd/lib/list/Item'
+import { Context } from '../../../../context/index.js'
 
 const CourseView = () => {
   const [course, setCourse] = useState({})
   const [visible, setVisible] = useState(false)
-  const [values, setValues] = useState({
-    title: '',
-    content: '',
-    video: {},
-  })
-  const [uploading, setUploading] = useState(false)
-  const [uploadButtonText, setUploadButtonText] = useState('Upload Video (Format MP4, 200MB Max Size)')
-  const [progress, setProgress] = useState(0)
-  const [students, setStudents] = useState(0)
-
   const router = useRouter()
   const { slug } = router.query
+  const { windowSize } = useContext(Context)
 
   useEffect(() => {
-    loadCourse()
+    axios
+      .get(`/api/course/${slug}`)
+      .then((res) => setCourse(res.data))
+      .catch((err) => console.log(err))
+    //
   }, [slug])
-
-  useEffect(() => {
-    course && studentCount()
-  }, [course])
-
-  const loadCourse = async () => {
-    const { data } = await axios.get(`/api/course/${slug}`)
-    setCourse(data)
-  }
-
-  const studentCount = async () => {
-    const { data } = await axios.post(`/api/instructor/student-count`, {
-      courseId: course._id,
-    })
-    setStudents(data.length)
-  }
-
-  const handleAddLesson = async (e) => {
-    e.preventDefault()
-    try {
-      const { data } = await axios.post(`/api/course/lesson/${slug}/${course.instructor._id}`, values)
-      setValues({ ...values, title: '', content: '', video: {} })
-      setProgress(0)
-      setUploadButtonText('Upload video')
-      setVisible(false)
-      setCourse(data)
-      toast.success('Lesson added')
-    } catch (err) {
-      console.log(err)
-      toast.error('Lesson add failed')
-    }
-  }
-
-  const handleVideo = async (e) => {
-    try {
-      const file = e.target.files[0]
-      setUploadButtonText(file.name)
-      setUploading(true)
-
-      const videoData = new FormData()
-      videoData.append('video', file)
-      const { data } = await axios.post(`/api/course/video-upload/${course.instructor._id}`, videoData, {
-        onUploadProgress: (e) => {
-          setProgress(Math.round((100 * e.loaded) / e.total))
-        },
-      })
-      setValues({ ...values, video: data })
-      setUploading(false)
-    } catch (err) {
-      console.log(err)
-      setUploading(false)
-      toast.error('Video upload failed')
-    }
-  }
-
-  const handleVideoRemove = async () => {
-    try {
-      setUploading(true)
-      const { data } = await axios.post(`/api/course/video-remove/${course.instructor._id}`, values.video)
-      setValues({ ...values, video: {} })
-      setUploading(false)
-      setUploadButtonText('Upload another video')
-    } catch (err) {
-      console.log(err)
-      setUploading(false)
-      toast.error('Video remove failed')
-    }
-  }
 
   const handlePublish = async (e, courseId) => {
     try {
@@ -146,11 +73,7 @@ const CourseView = () => {
                     <p style={{ marginTop: '-15px', fontSize: '10px' }}>{course.category}</p>
                   </div>
 
-                  <div className='d-flex pt-4'>
-                    <Tooltip title={`${students} Enrolled`}>
-                      <UserSwitchOutlined className='h5 pointer text-info mr-4' />
-                    </Tooltip>
-
+                  <div className='d-flex pt-4 mr-4'>
                     <Tooltip title='Edit'>
                       <EditOutlined
                         onClick={() => router.push(`/instructor/course/edit/${slug}`)}
@@ -158,7 +81,7 @@ const CourseView = () => {
                       />
                     </Tooltip>
 
-                    {course.lessons && course.lessons.length < 2 ? (
+                    {course?.lessons?.length < 2 ? (
                       <Tooltip title='Min 2 lessons required to publish'>
                         <QuestionOutlined className='h5 pointer text-danger' />
                       </Tooltip>
@@ -182,58 +105,56 @@ const CourseView = () => {
               </div>
             </div>
             <hr />
-            <div className='row text-center'>
-              <div className='col'>
-                <ReactMarkdown source={course.description} />
-              </div>
-            </div>
-            <div className='row add-lesson'>
-              <Button
-                onClick={() => setVisible(true)}
-                className='col-md-6 offset-md-3 text-center'
-                type='primary'
-                shape='round'
-                icon={<UploadOutlined />}
-                size='large'
-              >
-                Add Lesson
-              </Button>
-            </div>
-
-            <br />
-
-            <Modal title='+ Add Lesson' centered open={visible} onCancel={() => setVisible(false)} footer={null}>
+            <h2 className='col text-center'>
+              <ReactMarkdown children={course.description} />
+            </h2>
+            <Modal
+              title='+ Add Lesson'
+              centered
+              open={visible}
+              onCancel={() => setVisible(false)}
+              footer={null}
+              bodyStyle={windowSize.height < 1000 ? { height: '55vh' } : { height: '65vh' }}
+            >
               <AddLessonForm
-                values={values}
-                setValues={setValues}
-                handleAddLesson={handleAddLesson}
-                uploading={uploading}
-                uploadButtonText={uploadButtonText}
-                handleVideo={handleVideo}
-                progress={progress}
-                handleVideoRemove={handleVideoRemove}
+                slug={slug}
+                course={course}
+                setCourse={setCourse}
+                setVisible={setVisible}
+                windowSize={windowSize}
               />
             </Modal>
-
-            <div className='col pb-5'>
+            <div className='col'>
               <div className='row'>
                 <span className='col'>
                   <h4>The course lessons</h4>
                 </span>
                 <span className='col text-center'>
-                  <h6>total {course && course.lessons && course.lessons.length} Lessons</h6>
+                  <h6>total {course?.lessons?.length} Lessons</h6>
                 </span>
               </div>
               <div>
                 <List
                   itemLayout='horizontal'
-                  dataSource={course && course.lessons}
+                  dataSource={course?.lessons}
                   renderItem={(item, index) => (
                     <Item>
                       <Item.Meta avatar={<Avatar>{index + 1}</Avatar>} title={item.title}></Item.Meta>
                     </Item>
                   )}
                 ></List>
+              </div>
+              <div className='row add-lesson justify-content-center'>
+                <Button
+                  onClick={() => setVisible(true)}
+                  className='col-md-4 text-center'
+                  type='primary'
+                  shape='round'
+                  icon={<UploadOutlined />}
+                  size='large'
+                >
+                  Add Lesson
+                </Button>
               </div>
             </div>
           </div>

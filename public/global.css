@@ -5,7 +5,42 @@
   margin: 0;
   font-family: "Quicksand";
   /* border: red solid 0.5px; */
+  background-color: F5F5F5;
 }
+
+body {
+  /* font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', 'Helvetica',
+    'Arial', sans-serif;
+  padding: 20px 20px 60px;
+  max-width: 680px; */
+  /* background-color: F5F5F5; */
+  /* margin: 0 auto; */
+}
+
+.parent>h2>img {
+  max-width: 100vw;
+  height: 100%;
+}
+
+iframe {
+  /* display: none; */
+  width: 100%;
+  height: 60vh;
+  /* resize: both; */
+}
+
+#movie_player>div.ytp-chrome-top.ytp-show-cards-title>div.ytp-title-channel.ytp-title-show-collapsed>.ytp-title-channel-logo {
+  display: none;
+}
+
+#movie_player>div.ytp-chrome-top.ytp-show-cards-title>div.ytp-chrome-top-buttons>button.ytp-watch-later-button.ytp-button.ytp-show-watch-later-title>div.ytp-watch-later-icon>.ytp-watch-later-title {
+  display: none;
+}
+
+/* {
+  max-width: 100vw;
+  height: 100%;
+} */
 
 .square {
   border-radius: 0px;
@@ -33,4 +68,13 @@
 
 ::placeholder {
   color: red;
+}
+
+.editor-scroll ::-webkit-scrollbar {
+  display: none;
+}
+
+.editor-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

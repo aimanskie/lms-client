@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
 import InstructorRoute from '../../../../components/routes/InstructorRoute.js'
 import CourseCreateForm from '../../../../components/forms/CourseCreateForm.js'
@@ -8,6 +8,7 @@ import { useRouter } from 'next/router'
 import { List, Avatar, Modal } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons'
 import UpdateLessonForm from '../../../../components/forms/UpdateLessonForm.js'
+import { Context } from '../../../../context/index.js'
 
 const { Item } = List
 
@@ -24,15 +25,12 @@ const CourseEdit = () => {
   })
   const [image, setImage] = useState({})
   const [preview, setPreview] = useState('')
-  const [uploadButtonText, setUploadButtonText] = useState('')
+  const [uploadButtonText, setUploadButtonText] = useState('Upload Image')
   const [visible, setVisible] = useState(false)
   const [current, setCurrent] = useState({})
-  const [uploadVideoButtonText, setUploadVideoButtonText] = useState('')
-  const [progress, setProgress] = useState(0)
-  const [uploading, setUploading] = useState(false)
-
   const router = useRouter()
   const { slug } = router.query
+  const { windowSize } = useContext(Context)
 
   useEffect(() => {
     loadCourse()
@@ -130,46 +128,6 @@ const CourseEdit = () => {
     const { data } = await axios.put(`/api/course/${slug}/${removed[0]._id}`)
   }
 
-  /**
-   * lesson update functions
-   */
-
-  const handleVideo = async (e) => {
-    // remove previous video
-    if (current.video && current.video.Location) {
-      const res = await axios.post(`/api/course/video-remove/${values.instructor._id}`, current.video)
-    }
-    // upload
-    const file = e.target.files[0]
-    setUploadVideoButtonText(file.name)
-    setUploading(true)
-    // send video as form data
-    const videoData = new FormData()
-    videoData.append('video', file)
-    videoData.append('courseId', values._id)
-    // save progress bar and send video as form data to backend
-    const { data } = await axios.post(`/api/course/video-upload/${values.instructor._id}`, videoData, {
-      onUploadProgress: (e) => setProgress(Math.round((100 * e.loaded) / e.total)),
-    })
-    setCurrent({ ...current, video: data })
-    setUploading(false)
-  }
-
-  const handleUpdateLesson = async (e) => {
-    e.preventDefault()
-    const { data } = await axios.put(`/api/course/lesson/${slug}/${current._id}`, current)
-    setUploadVideoButtonText('Upload Video')
-    setVisible(false)
-    // update ui
-    if (data.ok) {
-      let arr = values.lessons
-      const index = arr.findIndex((el) => el._id === current._id)
-      arr[index] = current
-      setValues({ ...values, lessons: arr })
-      toast.success('Lesson updated')
-    }
-  }
-
   return (
     <InstructorRoute>
       <h1 className='jumbotron text-center square'>Update Course</h1>
@@ -190,6 +148,10 @@ const CourseEdit = () => {
       <div className='row pb-5'>
         <div className='col lesson-list'>
           <h4>{values && values.lessons && values.lessons.length} Lessons</h4>
+          <List>
+            <Item>Drag and drop to arrange the lessons</Item>
+            <Item>Press on the lessons to edit</Item>
+          </List>
           <List
             onDragOver={(e) => e.preventDefault()}
             itemLayout='horizontal'
@@ -203,8 +165,8 @@ const CourseEdit = () => {
                   }}
                   avatar={<Avatar>{index + 1}</Avatar>}
                   title={item.title}
+                  style={{ cursor: 'pointer' }}
                 ></Item.Meta>
-
                 <DeleteOutlined onClick={() => handleDelete(index)} className='text-danger float-right' />
               </Item>
             )}
@@ -212,15 +174,22 @@ const CourseEdit = () => {
         </div>
       </div>
 
-      <Modal title='Update lesson' centered open={visible} onCancel={() => setVisible(false)} footer={null}>
+      <Modal
+        title='Update lesson'
+        centered
+        open={visible}
+        onCancel={() => setVisible(false)}
+        footer={null}
+        bodyStyle={windowSize.height < 1000 ? { height: '60vh' } : { height: '70vh' }}
+      >
         <UpdateLessonForm
           current={current}
           setCurrent={setCurrent}
-          handleVideo={handleVideo}
-          handleUpdateLesson={handleUpdateLesson}
-          uploadVideoButtonText={uploadVideoButtonText}
-          progress={progress}
-          uploading={uploading}
+          setVisible={setVisible}
+          windowSize={windowSize}
+          setValues={setValues}
+          values={values}
+          slug={slug}
         />
       </Modal>
     </InstructorRoute>

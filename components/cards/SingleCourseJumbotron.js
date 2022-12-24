@@ -23,7 +23,7 @@ const SingleCourseJumbotron = ({
           {/* title */}
           <h1 className='text-light font-weight-bold'>{name}</h1>
           {/* description */}
-          <p className='lead'>{description && description.substring(0, 160)}</p>
+          <p className='lead'>{description?.substring(0, 160)}</p>
           {/* category */}
           <Badge count={category} style={{ backgroundColor: '#03a9f4' }} className='pb-4 mr-2' />
           {/* author */}
@@ -43,7 +43,7 @@ const SingleCourseJumbotron = ({
         <div className='col-md-4'>
           {/* {JSON.stringify(lessons[0])} */}
           {/* show video preview or course image */}
-          {lessons[0].video && lessons[0].video.Location ? (
+          {lessons[0]?.video?.Location ? (
             <div
               onClick={() => {
                 setPreview(lessons[0].video.Location)
@@ -60,7 +60,7 @@ const SingleCourseJumbotron = ({
             </div>
           ) : (
             <>
-              <img src={image && image.Location} alt={name} className='img img-fluid' />
+              <img src={image?.Location} alt={name} className='img img-fluid' />
             </>
           )}
 

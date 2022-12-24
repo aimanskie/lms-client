@@ -168,7 +168,9 @@ const SingleCourse = () => {
               />
             </div>
           )}
-          <ReactMarkdown children={course?.lessons?.[clicked]?.content} className='single-post' />
+          {/* <div> */}
+          <div dangerouslySetInnerHTML={{ __html: course?.lessons?.[clicked]?.content }} className='parent' />
+          {/* </div> */}
         </div>
       ) : updateState ? (
         <div style={{ marginTop: '40px', textAlign: 'center' }}>
