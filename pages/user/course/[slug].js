@@ -7,7 +7,7 @@ import ReactPlayer from 'react-player'
 import { PlayCircleOutlined, CheckCircleFilled, MinusCircleFilled, BookOutlined } from '@ant-design/icons'
 import Link from 'next/link'
 import { Context } from '../../../context/index.js'
-import { Document, Page } from 'react-pdf/dist/esm/entry.webpack5'
+import { Document, Page } from 'react-pdf'
 
 const SingleCourse = () => {
   const [clicked, setClicked] = useState(-1)
