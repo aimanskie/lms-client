@@ -7,8 +7,8 @@ import ReactPlayer from 'react-player'
 import { PlayCircleOutlined, CheckCircleFilled, MinusCircleFilled, BookOutlined } from '@ant-design/icons'
 import Link from 'next/link'
 import { Context } from '../../../context/index.js'
-import { Document, Page, pdfjs } from 'react-pdf/dist/esm/entry.webpack5'
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`
+import { Document, Page } from 'react-pdf/dist/esm/entry.webpack5'
+// pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`
 
 const SingleCourse = () => {
   const [clicked, setClicked] = useState(-1)
