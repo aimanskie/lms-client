@@ -8,6 +8,8 @@ import { PlayCircleOutlined, CheckCircleFilled, MinusCircleFilled, BookOutlined 
 import Link from 'next/link'
 import { Context } from '../../../context/index.js'
 import { Document, Page } from 'react-pdf'
+import { pdfjs } from 'react-pdf'
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
 const SingleCourse = () => {
   const [clicked, setClicked] = useState(-1)
