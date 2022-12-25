@@ -4,15 +4,6 @@ import UserRoute from '../../../components/routes/UserRoute'
 import axios from 'axios'
 import { SyncOutlined } from '@ant-design/icons'
 
-// const originData = []
-// for (let i = 0; i < 10; i++) {
-//   originData.push({
-//     key: i.toString(),
-//     name: `Edrward ${i}`,
-//     age: 32,
-//     address: `London Park no. ${i}`,
-//   })
-// }
 const EditableCell = ({ editing, dataIndex, title, inputType, record, index, children, ...restProps }) => {
   const inputNode = inputType === 'number' ? <InputNumber /> : <Input />
   return (

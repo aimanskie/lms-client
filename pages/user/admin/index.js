@@ -1,11 +1,23 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
+import { useRouter } from 'next/router'
 import UserRoute from '../../../components/routes/UserRoute.js'
 import axios from 'axios'
 import { SyncOutlined } from '@ant-design/icons'
+import { Context } from '../../../context/index.js'
 
 const AdminUser = () => {
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(false)
+
+  const {
+    state: { user },
+    dispatch,
+  } = useContext(Context)
+  const router = useRouter()
+
+  useEffect(() => {
+    if (user === null) router.push('/login')
+  }, [user])
 
   useEffect(() => {
     setLoading(true)
@@ -26,7 +38,7 @@ const AdminUser = () => {
         {loading && <SyncOutlined spin className='d-flex justify-content-center display-1 text-danger p-5' />}
         <h1 className='jumbotron text-center square w-100'>Admin</h1>
 
-        {users.map((user, index) => {
+        {users?.map((user, index) => {
           const { picture, name, email } = user
           return (
             <div>

@@ -4,10 +4,11 @@ import axios from 'axios'
 import StudentRoute from '../../../components/routes/StudentRoute.js'
 import { Menu, Button, Drawer } from 'antd'
 import ReactPlayer from 'react-player'
-import ReactMarkdown from 'react-markdown'
 import { PlayCircleOutlined, CheckCircleFilled, MinusCircleFilled, BookOutlined } from '@ant-design/icons'
 import Link from 'next/link'
 import { Context } from '../../../context/index.js'
+import { Document, Page, pdfjs } from 'react-pdf/dist/esm/entry.webpack5'
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`
 
 const SingleCourse = () => {
   const [clicked, setClicked] = useState(-1)
@@ -16,6 +17,9 @@ const SingleCourse = () => {
   let [objStore, setObjStore] = useState({})
   const [completedLessons, setCompletedLessons] = useState([])
   const [updateState, setUpdateState] = useState(false)
+  const [numPages, setNumPages] = useState(null)
+  const [pageNumber, setPageNumber] = useState(1)
+  const [scaleNumber, setScaleNumber] = useState(1)
 
   const router = useRouter()
   const { slug } = router.query
@@ -120,6 +124,25 @@ const SingleCourse = () => {
     setOpenDrawer(true)
   }
 
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages)
+  }
+
+  const handlePrev = () => {
+    setPageNumber((currentPage) => currentPage - 1)
+  }
+  const handleNext = () => {
+    setPageNumber((currentPage) => currentPage + 1)
+  }
+
+  const handleZoomIn = () => {
+    setScaleNumber((currentScale) => currentScale + 0.25)
+  }
+
+  const handleZoomOut = () => {
+    setScaleNumber((currentScale) => currentScale - 0.25)
+  }
+
   return (
     <StudentRoute>
       {clicked !== -1 && !updateState ? (
@@ -168,9 +191,32 @@ const SingleCourse = () => {
               />
             </div>
           )}
-          {/* <div> */}
-          <div dangerouslySetInnerHTML={{ __html: course?.lessons?.[clicked]?.content }} className='parent' />
-          {/* </div> */}
+          {course?.lessons?.[clicked]?.content && (
+            <div dangerouslySetInnerHTML={{ __html: course?.lessons?.[clicked]?.content }} />
+          )}
+          {course?.lessons?.[clicked]?.pdf?.Location && (
+            <>
+              <div className='container'>
+                <button onClick={handleZoomOut}>Zoom Out</button>
+                <button onClick={handlePrev}>Prev Page</button> {pageNumber} of {numPages}
+                <button onClick={handleNext}>Next Page</button>
+                <button onClick={handleZoomIn}>Zoom In</button>
+                <div className='row'>
+                  <div className='col'></div>
+                  <div className='col-13'>
+                    <Document file={course.lessons[clicked].pdf.Location} onLoadSuccess={onDocumentLoadSuccess}>
+                      <Page pageNumber={pageNumber} /* width={'100vw'} */ /* height={'100vh'} */ scale={scaleNumber} />
+                    </Document>
+                  </div>
+                  <div className='col'></div>
+                </div>
+                <button onClick={handleZoomOut}>Zoom Out</button>
+                <button onClick={handlePrev}>Prev Page</button> {pageNumber} of {numPages}
+                <button onClick={handleNext}>Next Page</button>
+                <button onClick={handleZoomIn}>Zoom In</button>
+              </div>
+            </>
+          )}
         </div>
       ) : updateState ? (
         <div style={{ marginTop: '40px', textAlign: 'center' }}>
