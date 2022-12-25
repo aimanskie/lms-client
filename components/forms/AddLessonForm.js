@@ -37,15 +37,15 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
   const [values, setValues] = useState({
     title: '',
     content: '',
-    video: {},
-    pdf: {},
+    video: { Location: '' },
+    pdf: { Location: '' },
   })
 
   const handleAddLesson = async (e) => {
     e.preventDefault()
     try {
       const { data } = await axios.post(`/api/course/lesson/${slug}/${course.instructor._id}`, values)
-      setValues({ ...values, title: '', content: '', video: {}, pdf: {} })
+      setValues({ ...values, title: '', content: '', video: { Location: '' }, pdf: { Location: '' } })
       setProgress(0)
       setUploadButtonText('Upload video')
       setVisible(false)
@@ -107,9 +107,14 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
     return setVideo({ url: true, video: false })
   }
 
+  const handleOptionPdf = (e) => {
+    if (e) return setPdfFile({ pdf: true, url: false })
+    return setPdfFile({ url: true, pdf: false })
+  }
+
   const handleURLPdf = (e) => {
     // console.log(e.target.value)
-    setValues({ ...values, pdf: e.target.value })
+    setValues({ ...values, pdf: { Location: e.target.value } })
   }
 
   const uploadPdf = async (e) => {
@@ -205,29 +210,48 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
               onChange={handleURL}
               type='text'
               style={{ width: '100%', textAlign: 'center', marginTop: 1, padding: 3 }}
-              value={values.video}
+              value={values.video.Location}
             />
           )}
+          <Select
+            placeholder='Upload Pdf'
+            style={{
+              width: '100%',
+            }}
+            onChange={handleOptionPdf}
+            options={[
+              {
+                value: true,
+                label: 'pdf upload',
+              },
+              {
+                value: false,
+                label: 'url',
+              },
+            ]}
+          />
           {pdfFile.url && (
             <input
               placeholder='PDF Url'
               onChange={handleURLPdf}
               type='text'
               style={{ width: '100%', textAlign: 'center', marginTop: 1, padding: 3 }}
-              value={values.pdf}
+              value={values.pdf.Location}
             />
           )}
-          <label className='btn btn-dark btn-block text-center'>
-            {uploadPdfText}
-            <input onChange={uploadPdf} type='file' accept='application/pdf' hidden />
-            {!uploading && values.pdf.Location && (
-              <Button style={{ backgroundColor: 'transparent', border: 'none' }} title='remove'>
-                <span onClick={removePdf}>
-                  <CloseCircleFilled className='text-danger d-flex float-right' />
-                </span>
-              </Button>
-            )}
-          </label>
+          {pdfFile.pdf && (
+            <label className='btn btn-dark btn-block text-center'>
+              {uploadPdfText}
+              <input onChange={uploadPdf} type='file' accept='application/pdf' hidden />
+              {!uploading && values.pdf.Location && (
+                <Button style={{ backgroundColor: 'transparent', border: 'none' }} title='remove'>
+                  <span onClick={removePdf}>
+                    <CloseCircleFilled className='text-danger d-flex float-right' />
+                  </span>
+                </Button>
+              )}
+            </label>
+          )}
         </div>
         {progress > 0 && <Progress className='d-flex justify-content-center pt-2' percent={progress} steps={10} />}
         <Button
