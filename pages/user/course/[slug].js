@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { Context } from '../../../context/index.js'
 import { Document, Page } from 'react-pdf'
 import { pdfjs } from 'react-pdf'
+import InnerHTML from 'dangerously-set-html-content'
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
 const SingleCourse = () => {
@@ -21,6 +22,7 @@ const SingleCourse = () => {
   const [numPages, setNumPages] = useState(null)
   const [pageNumber, setPageNumber] = useState(1)
   const [scaleNumber, setScaleNumber] = useState(1)
+  const [pdfDiv, setPdfDiv] = useState(null)
 
   const router = useRouter()
   const { slug } = router.query
@@ -127,6 +129,14 @@ const SingleCourse = () => {
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages)
+    setTimeout(() => {
+      document.querySelector('.react-pdf__Page').children[0].style.width = '100%'
+      document.querySelector('.react-pdf__Page').children[0].style.height = '100%'
+      if (document.querySelector('.content')?.children[0]?.children[3]?.children[0]) {
+        document.querySelector('.content').children[0].children[3].children[0].style.width = '100%'
+        document.querySelector('.content').children[0].children[3].children[0].style.height = '100%'
+      }
+    }, 1000)
   }
 
   const handlePrev = () => {
@@ -143,6 +153,18 @@ const SingleCourse = () => {
   const handleZoomOut = () => {
     setScaleNumber((currentScale) => currentScale - 0.25)
   }
+
+  // const handleContent = () => {
+  //   console.log('did it come here')
+  //   document.querySelector('.content').children[0].children[3].children[0].style.width = '100%'
+  //   document.querySelector('.content').children[0].children[3].children[0].style.height = '100%'
+  // }
+
+  // useEffect(() => {
+  //   if (!document.querySelector('content')?.children[0]?.children[3]?.children[0]) return
+  //   document.querySelector('content').children[0].children[3].children[0].style.width = '100%'
+  //   document.querySelector('content').children[0].children[3].children[0].style.height = '100%'
+  // }, [])
 
   return (
     <StudentRoute>
@@ -189,28 +211,44 @@ const SingleCourse = () => {
                 onEnded={markCompleted}
                 config={{ file: { attributes: { controlsList: 'nodownload' } } }}
                 onContextMenu={(e) => e.preventDefault()}
+                // onReady={handleOnReady}
               />
             </div>
           )}
-          {course?.lessons?.[clicked]?.content && (
-            <div dangerouslySetInnerHTML={{ __html: course?.lessons?.[clicked]?.content }} />
-          )}
+          <div className='content'>
+            {course?.lessons?.[clicked]?.content && (
+              <>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: course?.lessons?.[clicked]?.content,
+                  }}
+                />
+                {/* <div
+                  dangerouslySetInnerHTML={{
+                    __html: `${(<script type='text/javascript' onLoad={handleContent}></script>)}`,
+                  }}
+                /> */}
+              </>
+            )}
+          </div>
           {course?.lessons?.[clicked]?.pdf?.Location && (
             <>
-              <div className='container'>
+              {/* {windowSize.width < 900 ? checkDiv.classList.add('font-size') : checkDiv.classList.remove('font-size')} */}
+              <div className='container-fluid'>
                 <button onClick={handleZoomOut}>Zoom Out</button>
                 <button onClick={handlePrev}>Prev Page</button> {pageNumber} of {numPages}
                 <button onClick={handleNext}>Next Page</button>
                 <button onClick={handleZoomIn}>Zoom In</button>
-                <div className='row'>
+                {/* <div className='row'>
                   <div className='col'></div>
-                  <div className='col-13'>
-                    <Document file={course.lessons[clicked].pdf.Location} onLoadSuccess={onDocumentLoadSuccess}>
-                      <Page pageNumber={pageNumber} /* width={'100vw'} */ /* height={'100vh'} */ scale={scaleNumber} />
-                    </Document>
-                  </div>
+                  <div className='col-13'> */}
+                <Document file={course.lessons[clicked].pdf.Location} onLoadSuccess={onDocumentLoadSuccess}>
+                  <Page pageNumber={pageNumber} /* width={'100vw'} */ /* height={'100vh'} */ scale={scaleNumber} />
+                </Document>
+                {/* {pdfDiv} */}
+                {/* </div>
                   <div className='col'></div>
-                </div>
+                </div> */}
                 <button onClick={handleZoomOut}>Zoom Out</button>
                 <button onClick={handlePrev}>Prev Page</button> {pageNumber} of {numPages}
                 <button onClick={handleNext}>Next Page</button>

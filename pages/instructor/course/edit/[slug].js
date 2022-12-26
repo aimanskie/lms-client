@@ -180,7 +180,7 @@ const CourseEdit = () => {
         open={visible}
         onCancel={() => setVisible(false)}
         footer={null}
-        bodyStyle={windowSize.height < 1000 ? { height: '60vh' } : { height: '70vh' }}
+        bodyStyle={{ height: '90vh' }}
       >
         <UpdateLessonForm
           current={current}

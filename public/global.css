@@ -24,6 +24,11 @@ iframe {
   /* resize: both; */
 }
 
+iframe.edit {
+  width: 50%;
+  height: 50%;
+}
+
 #movie_player>div.ytp-chrome-top.ytp-show-cards-title>div.ytp-title-channel.ytp-title-show-collapsed>.ytp-title-channel-logo {
   display: none;
 }
@@ -73,4 +78,17 @@ iframe {
 .react-pdf__Page__annotations,
 .annotationLayer {
   display: none;
+}
+
+.content {
+  word-break: break-word;
+  max-width: 70%;
+  max-height: 100%;
+  margin: auto;
+  /* overflow: hidden; */
+}
+
+.content>img {
+  width: 100%;
+  height: 100%;
 }

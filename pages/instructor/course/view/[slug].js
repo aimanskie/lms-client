@@ -3,13 +3,7 @@ import { useRouter } from 'next/router'
 import InstructorRoute from '../../../../components/routes/InstructorRoute.js'
 import axios from 'axios'
 import { Avatar, Tooltip, Button, Modal, List } from 'antd'
-import {
-  EditOutlined,
-  CheckOutlined,
-  UploadOutlined,
-  QuestionOutlined,
-  CloseOutlined,
-} from '@ant-design/icons'
+import { EditOutlined, CheckOutlined, UploadOutlined, QuestionOutlined, CloseOutlined } from '@ant-design/icons'
 import ReactMarkdown from 'react-markdown'
 import AddLessonForm from '../../../../components/forms/AddLessonForm.js'
 import { toast } from 'react-toastify'
@@ -114,7 +108,7 @@ const CourseView = () => {
               open={visible}
               onCancel={() => setVisible(false)}
               footer={null}
-              bodyStyle={windowSize.height < 1000 ? { height: '55vh' } : { height: '65vh' }}
+              bodyStyle={{ height: '75vh', }}
             >
               <AddLessonForm
                 slug={slug}

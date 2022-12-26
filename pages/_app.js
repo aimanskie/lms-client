@@ -11,7 +11,7 @@ import { Layout } from 'antd'
 function MyApp({ Component, pageProps }) {
   return (
     <Provider>
-      <Layout style={{ height: '100vh' }}>
+      <Layout>
         <ToastContainer position='top-right' autoClose={2500} hideProgressBar={true} theme={'dark'} />
         <Head>
           <title>LMS</title>

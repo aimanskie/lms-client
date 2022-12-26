@@ -68,7 +68,7 @@ const CourseCreate = () => {
         ...values,
         image,
       })
-      toast('Great! Now you can start adding lessons')
+      toast.success('Great! Now you can start adding lessons')
       setTimeout(() => {
         router.push('/instructor')
       }, 1500)

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import dynamic from 'next/dynamic'
 import 'react-quill/dist/quill.snow.css'
-import { Button, Progress, Select } from 'antd'
+import { Button, Progress, Select, Input } from 'antd'
 import { CloseCircleFilled } from '@ant-design/icons'
 import { toast } from 'react-toastify'
 import axios from 'axios'
@@ -138,19 +138,18 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
     }
   }
 
-  const removePdf = async (e) => {
-    console.log(e)
-    // try {
-    //   setUploading(true)
-    //   const { data } = await axios.post(`/api/course/video-remove/${course.instructor._id}`, values.video)
-    //   setValues({ ...values, video: {} })
-    //   setUploading(false)
-    //   setUploadButtonText('Upload another video')
-    // } catch (err) {
-    //   console.log(err)
-    //   setUploading(false)
-    //   toast.error('Video remove failed')
-    // }
+  const removePdf = async () => {
+    try {
+      setUploading(true)
+      const { data } = await axios.post(`/api/course/pdf-remove/${course.instructor._id}`, values.pdf)
+      setValues({ ...values, pdf: {} })
+      setUploading(false)
+      setUploadButtonText('Upload another pdf')
+    } catch (err) {
+      console.log(err)
+      setUploading(false)
+      toast.error('Pdf remove failed')
+    }
   }
   return (
     <div className='container pt-3'>
@@ -169,7 +168,15 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
             modules={modules}
             onChange={(e) => setValues({ ...values, content: e })}
             theme='snow'
-            style={windowSize.height < 1000 ? { height: '25vh' } : { height: '40vh' }}
+            style={
+              windowSize.height > 1200
+                ? { height: '50vh', marginBottom: '10px' }
+                : windowSize.height > 855
+                ? { height: '40vh', marginBottom: '10px' }
+                : windowSize.height > 680
+                ? { height: '30vh', marginBottom: '10px' }
+                : { height: '10vh', marginBottom: '10px' }
+            }
             value={values.content}
           />
         </div>
@@ -178,6 +185,8 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
             placeholder='Upload Video'
             style={{
               width: '100%',
+              marginTop: '10px',
+              textAlign: 'center',
             }}
             onChange={handleOption}
             options={[
@@ -194,7 +203,7 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
           {video?.video && (
             <label className='btn btn-dark btn-block text-center'>
               {uploadButtonText}
-              <input onChange={handleVideo} type='file' accept='video/*' hidden />
+              <Input onChange={handleVideo} type='file' accept='video/*' hidden />
               {!uploading && values.video.Location && (
                 <Button style={{ backgroundColor: 'transparent', border: 'none' }} title='remove'>
                   <span onClick={handleVideoRemove}>
@@ -205,7 +214,7 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
             </label>
           )}
           {video.url && (
-            <input
+            <Input
               placeholder='Vimeo, Youtube links'
               onChange={handleURL}
               type='text'
@@ -217,6 +226,8 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
             placeholder='Upload Pdf'
             style={{
               width: '100%',
+              textAlign: 'center',
+              marginTop: '5px',
             }}
             onChange={handleOptionPdf}
             options={[
@@ -231,18 +242,18 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
             ]}
           />
           {pdfFile.url && (
-            <input
+            <Input
               placeholder='PDF Url'
               onChange={handleURLPdf}
               type='text'
-              style={{ width: '100%', textAlign: 'center', marginTop: 1, padding: 3 }}
+              style={{ textAlign: 'center', marginTop: 5, padding: 5 }}
               value={values.pdf.Location}
             />
           )}
           {pdfFile.pdf && (
             <label className='btn btn-dark btn-block text-center'>
               {uploadPdfText}
-              <input onChange={uploadPdf} type='file' accept='application/pdf' hidden />
+              <Input onChange={uploadPdf} type='file' accept='application/pdf' hidden />
               {!uploading && values.pdf.Location && (
                 <Button style={{ backgroundColor: 'transparent', border: 'none' }} title='remove'>
                   <span onClick={removePdf}>
@@ -261,7 +272,7 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
           type='primary'
           loading={uploading}
           shape='round'
-          style={{ width: '100%' }}
+          style={{ width: '86%', position: 'absolute', bottom: '10px' }}
         >
           Save
         </Button>
