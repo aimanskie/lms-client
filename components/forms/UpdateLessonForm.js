@@ -28,15 +28,17 @@ const UpdateLessonForm = ({ current, setCurrent, setVisible, windowSize, setValu
   const [progress, setProgress] = useState(0)
   const [uploading, setUploading] = useState(false)
   const [video, setVideo] = useState({ video: undefined, url: undefined })
-  const [iFrame, setIframe] = useState(null)
   const [hostname, setHostname] = useState(null)
+  const [ifFrame, setIfframe] = useState(null)
 
   const handleUpdateLesson = async (e) => {
     e.preventDefault()
     const { data } = await axios.put(`/api/course/lesson/${slug}/${current._id}`, current)
     setUploadVideoButtonText('Upload Video')
-    setVisible(false)
+    console.log(data)
+    // setVisible(false)
     // update ui
+
     if (data.ok) {
       let arr = values.lessons
       const index = arr.findIndex((el) => el._id === current._id)
@@ -47,7 +49,7 @@ const UpdateLessonForm = ({ current, setCurrent, setVisible, windowSize, setValu
   }
   const handleVideo = async (e) => {
     // remove previous video
-    if (current.video && current.video.Location) {
+    if (current?.video?.Location) {
       const res = await axios.post(`/api/course/video-remove/${values.instructor._id}`, current.video)
     }
     // upload
@@ -67,9 +69,7 @@ const UpdateLessonForm = ({ current, setCurrent, setVisible, windowSize, setValu
   }
 
   const handleContent = (e) => {
-    setCurrent((prev) => {
-      return { ...prev, content: e }
-    })
+    setCurrent({ ...current, content: e })
   }
 
   const handleOption = (e) => {
@@ -78,7 +78,7 @@ const UpdateLessonForm = ({ current, setCurrent, setVisible, windowSize, setValu
   }
 
   const handleURL = (e) => {
-    setCurrent({ ...values, video: { Location: e.target.value } })
+    setCurrent({ ...current, video: { Location: e.target.value } })
   }
 
   useEffect(() => {
@@ -94,10 +94,10 @@ const UpdateLessonForm = ({ current, setCurrent, setVisible, windowSize, setValu
     )
     space?.classList.add('youtube')
     const spaceYoutube = document.querySelector('.youtube')
-    spaceYoutube.style = { wdith: '100%', height: '100%' }
-    setIframe(iFrame)
-    iFrame?.classList.add('edit')
-    console.log(iFrame)
+    spaceYoutube.style.width = '100%'
+    spaceYoutube.style.height = '100%'
+    setIfframe(iFrame)
+    ifFrame?.classList.add('edit')
   }
 
   return (
@@ -157,7 +157,8 @@ const UpdateLessonForm = ({ current, setCurrent, setVisible, windowSize, setValu
                     placeholder='Vimeo, Youtube links'
                     onChange={handleURL}
                     type='text'
-                    value={current.video.Location}
+                    value={current?.video?.Location}
+                    className='mt-2'
                   />
                 )}
               </>
@@ -195,7 +196,7 @@ const UpdateLessonForm = ({ current, setCurrent, setVisible, windowSize, setValu
                       onChange={handleURL}
                       type='text'
                       style={{ width: '100%', textAlign: 'center' }}
-                      value={current.video.Location}
+                      value={current?.video?.Location}
                       className='mt-2'
                     />
                   )}

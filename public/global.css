@@ -20,12 +20,12 @@ body {
 iframe {
   /* display: none; */
   width: 100%;
-  height: 60vh;
+  height: 100%;
   /* resize: both; */
 }
 
 iframe.edit {
-  width: 50%;
+  width: 30%;
   height: 50%;
 }
 

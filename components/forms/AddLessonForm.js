@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import dynamic from 'next/dynamic'
 import 'react-quill/dist/quill.snow.css'
-import { Button, Progress, Select, Input } from 'antd'
+import { Button, Progress, Select, Input, Form } from 'antd'
 import { CloseCircleFilled } from '@ant-design/icons'
 import { toast } from 'react-toastify'
 import axios from 'axios'
@@ -20,37 +20,44 @@ const modules = {
     ['link', 'image'],
     ['clean'],
   ],
-
   clipboard: {
     matchVisual: false,
   },
 }
 
 const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
-  const [content, setContent] = useState('')
   const [video, setVideo] = useState({ video: undefined, url: undefined })
   const [pdfFile, setPdfFile] = useState({ pdf: undefined, url: undefined })
   const [uploading, setUploading] = useState(false)
   const [uploadButtonText, setUploadButtonText] = useState('Upload Video')
   const [uploadPdfText, setUploadButtonPdf] = useState('Upload Pdf')
   const [progress, setProgress] = useState(0)
-  const [values, setValues] = useState({
-    title: '',
-    content: '',
-    video: { Location: '' },
-    pdf: { Location: '' },
+  let [values, setValues] = useState({
+    video: { Location: undefined },
+    pdf: { Location: undefined },
   })
+  const [title, setTitle] = useState('')
+  const [content, setContent] = useState('')
 
   const handleAddLesson = async (e) => {
     e.preventDefault()
     try {
-      const { data } = await axios.post(`/api/course/lesson/${slug}/${course.instructor._id}`, values)
-      setValues({ ...values, title: '', content: '', video: { Location: '' }, pdf: { Location: '' } })
+      const { data } = await axios.post(`/api/course/lesson/${slug}/${course.instructor._id}`, {
+        title: title,
+        content: content,
+        video: values.video,
+        pdf: values.pdf,
+      })
+      setValues({ video: { Location: undefined }, pdf: { Location: undefined } })
+      setContent('')
+      setTitle('')
+      setUploading(false)
       setProgress(0)
-      setUploadButtonText('Upload video')
-      setVisible(false)
+      setUploadButtonText('Upload Video')
+      setUploadButtonPdf('Upload Pdf')
       setCourse(data)
       toast.success('Lesson added')
+      setVisible(false)
     } catch (err) {
       console.log(err)
       toast.error('Lesson add failed')
@@ -82,7 +89,7 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
     try {
       setUploading(true)
       const { data } = await axios.post(`/api/course/video-remove/${course.instructor._id}`, values.video)
-      setValues({ ...values, video: {} })
+      setValues({ ...values, video: { Location: undefined } })
       setUploading(false)
       setUploadButtonText('Upload another video')
     } catch (err) {
@@ -93,13 +100,7 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
   }
 
   const handleURL = (e) => {
-    // console.log(e)
     setValues({ ...values, video: { Location: e.target.value } })
-  }
-
-  const handleContent = async (e) => {
-    setContent(e)
-    setValues({ ...values, content: content })
   }
 
   const handleOption = (e) => {
@@ -113,7 +114,6 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
   }
 
   const handleURLPdf = (e) => {
-    // console.log(e.target.value)
     setValues({ ...values, pdf: { Location: e.target.value } })
   }
 
@@ -142,7 +142,7 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
     try {
       setUploading(true)
       const { data } = await axios.post(`/api/course/pdf-remove/${course.instructor._id}`, values.pdf)
-      setValues({ ...values, pdf: {} })
+      setValues({ ...values, pdf: { Location: undefined } })
       setUploading(false)
       setUploadButtonText('Upload another pdf')
     } catch (err) {
@@ -153,20 +153,19 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
   }
   return (
     <div className='container pt-3'>
-      <form onSubmit={handleAddLesson}>
+      <form>
         <input
           type='text'
           className='form-control square'
-          onChange={(e) => setValues({ ...values, title: e.target.value })}
-          value={values.title}
+          onChange={(e) => setTitle(e.target.value)}
           placeholder='Title'
-          autoFocus
           required
+          value={title}
         />
-        <div className='quill-container' style={{ display: 'table' }}>
+        <div>
           <QuillNoSSRWrapper
             modules={modules}
-            onChange={(e) => setValues({ ...values, content: e })}
+            onChange={(e) => setContent(e)}
             theme='snow'
             style={
               windowSize.height > 1200
@@ -177,7 +176,7 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
                 ? { height: '30vh', marginBottom: '10px' }
                 : { height: '10vh', marginBottom: '10px' }
             }
-            value={values.content}
+            value={content}
           />
         </div>
         <div className='justify-content-center pt-5'>
@@ -204,7 +203,7 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
             <label className='btn btn-dark btn-block text-center'>
               {uploadButtonText}
               <Input onChange={handleVideo} type='file' accept='video/*' hidden />
-              {!uploading && values.video.Location && (
+              {!uploading && values?.video?.Location && (
                 <Button style={{ backgroundColor: 'transparent', border: 'none' }} title='remove'>
                   <span onClick={handleVideoRemove}>
                     <CloseCircleFilled className='text-danger d-flex float-right' />
@@ -213,7 +212,7 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
               )}
             </label>
           )}
-          {video.url && (
+          {video?.url && (
             <Input
               placeholder='Vimeo, Youtube links'
               onChange={handleURL}
@@ -241,7 +240,7 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
               },
             ]}
           />
-          {pdfFile.url && (
+          {pdfFile?.url && (
             <Input
               placeholder='PDF Url'
               onChange={handleURLPdf}
@@ -250,11 +249,11 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
               value={values.pdf.Location}
             />
           )}
-          {pdfFile.pdf && (
+          {pdfFile?.pdf && (
             <label className='btn btn-dark btn-block text-center'>
               {uploadPdfText}
               <Input onChange={uploadPdf} type='file' accept='application/pdf' hidden />
-              {!uploading && values.pdf.Location && (
+              {!uploading && values?.pdf?.Location && (
                 <Button style={{ backgroundColor: 'transparent', border: 'none' }} title='remove'>
                   <span onClick={removePdf}>
                     <CloseCircleFilled className='text-danger d-flex float-right' />
