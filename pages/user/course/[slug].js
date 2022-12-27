@@ -9,7 +9,6 @@ import Link from 'next/link'
 import { Context } from '../../../context/index.js'
 import { Document, Page } from 'react-pdf'
 import { pdfjs } from 'react-pdf'
-import InnerHTML from 'dangerously-set-html-content'
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
 const SingleCourse = () => {
