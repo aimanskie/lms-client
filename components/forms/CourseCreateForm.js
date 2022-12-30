@@ -1,5 +1,5 @@
 import { Select, Button, Avatar, Badge } from 'antd'
-
+import Price from '../layout/PriceRange'
 const { Option } = Select
 
 const CourseCreateForm = ({
@@ -13,10 +13,6 @@ const CourseCreateForm = ({
   handleImageRemove = (f) => f,
   editPage = false,
 }) => {
-  const children = []
-  for (let i = 9.99; i <= 100.99; i++) {
-    children.push(<Option key={i.toFixed(2)}>RM {i.toFixed(2)}</Option>)
-  }
   return (
     <>
       {values && (
@@ -59,17 +55,9 @@ const CourseCreateForm = ({
             </div>
 
             {values.paid && (
-              <div className='form-group'>
-                <Select
-                  defaultValue='RM 9.99'
-                  style={{ widht: '100%' }}
-                  onChange={(v) => setValues({ ...values, price: v })}
-                  tokenSeparators={[,]}
-                  size='large'
-                >
-                  {children}
-                </Select>
-              </div>
+              // <div className='form-group'>
+              <Price setValues={setValues} values={values} />
+              // </div>
             )}
           </div>
 

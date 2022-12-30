@@ -2,28 +2,23 @@ import { useState, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 import InstructorRoute from '../../../../components/routes/InstructorRoute.js'
 import axios from 'axios'
-import { Avatar, Tooltip, Button, Modal, List } from 'antd'
-import { EditOutlined, CheckOutlined, UploadOutlined, QuestionOutlined, CloseOutlined } from '@ant-design/icons'
 import ReactMarkdown from 'react-markdown'
-import AddLessonForm from '../../../../components/forms/AddLessonForm.js'
 import { toast } from 'react-toastify'
-import Item from 'antd/lib/list/Item'
 import { Context } from '../../../../context/index.js'
+import Back from '../../../../components/layout/Back.js'
+import CreatedCourseList from '../../../../components/layout/CreatedCourseList.js'
+import AddLesson from '../../../../components/layout/AddLesson.js'
 
-const CourseView = () => {
+const CourseView = ({ data }) => {
   const [course, setCourse] = useState({})
   const [visible, setVisible] = useState(false)
+  const { windowSize } = useContext(Context)
   const router = useRouter()
   const { slug } = router.query
-  const { windowSize } = useContext(Context)
 
   useEffect(() => {
-    axios
-      .get(`/api/course/${slug}`)
-      .then((res) => setCourse(res.data))
-      .catch((err) => console.log(err))
-    //
-  }, [slug])
+    setCourse(data)
+  }, [])
 
   const handlePublish = async (e, courseId) => {
     try {
@@ -53,109 +48,37 @@ const CourseView = () => {
 
   return (
     <InstructorRoute>
+      <Back />
       <div className='contianer-fluid pt-3'>
         {course && (
           <div className='container-fluid pt-1'>
-            <div className='media pt-2'>
-              <Avatar size={80} src={course.image ? course.image.Location : '/course.png'} />
-
-              <div className='media-body pl-2'>
-                <div className='row'>
-                  <div className='col'>
-                    <h5 className='mt-2 text-primary'>{course.name}</h5>
-                    <p style={{ marginTop: '-10px' }}>{course.lessons && course.lessons.length} Lessons</p>
-                    <p style={{ marginTop: '-15px', fontSize: '10px' }}>{course.category}</p>
-                  </div>
-
-                  <div className='d-flex pt-4 mr-4'>
-                    <Tooltip title='Edit'>
-                      <EditOutlined
-                        onClick={() => router.push(`/instructor/course/edit/${slug}`)}
-                        className='h5 pointer text-warning mr-4'
-                      />
-                    </Tooltip>
-
-                    {course?.lessons?.length < 2 ? (
-                      <Tooltip title='Min 2 lessons required to publish'>
-                        <QuestionOutlined className='h5 pointer text-danger' />
-                      </Tooltip>
-                    ) : course.published ? (
-                      <Tooltip title='Unpublish'>
-                        <CloseOutlined
-                          onClick={(e) => handleUnpublish(e, course._id)}
-                          className='h5 pointer text-danger'
-                        />
-                      </Tooltip>
-                    ) : (
-                      <Tooltip title='Publish'>
-                        <CheckOutlined
-                          onClick={(e) => handlePublish(e, course._id)}
-                          className='h5 pointer text-success'
-                        />
-                      </Tooltip>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <CreatedCourseList course={course} handlePublish={handlePublish} handleUnpublish={handleUnpublish} />
             <hr />
             <h2 className='col text-center'>
               <ReactMarkdown children={course.description} />
             </h2>
-            <Modal
-              title='+ Add Lesson'
-              centered
-              open={visible}
-              onCancel={() => setVisible(false)}
-              footer={null}
-              bodyStyle={{ height: '75vh', }}
-            >
-              <AddLessonForm
-                slug={slug}
-                course={course}
-                setCourse={setCourse}
-                setVisible={setVisible}
-                windowSize={windowSize}
-              />
-            </Modal>
-            <div className='col'>
-              <div className='row'>
-                <span className='col'>
-                  <h4>The course lessons</h4>
-                </span>
-                <span className='col text-center'>
-                  <h6>total {course?.lessons?.length} Lessons</h6>
-                </span>
-              </div>
-              <div>
-                <List
-                  itemLayout='horizontal'
-                  dataSource={course?.lessons}
-                  renderItem={(item, index) => (
-                    <Item>
-                      <Item.Meta avatar={<Avatar>{index + 1}</Avatar>} title={item.title}></Item.Meta>
-                    </Item>
-                  )}
-                ></List>
-              </div>
-              <div className='row add-lesson justify-content-center'>
-                <Button
-                  onClick={() => setVisible(true)}
-                  className='col-md-4 text-center'
-                  type='primary'
-                  shape='round'
-                  icon={<UploadOutlined />}
-                  size='large'
-                >
-                  Add Lesson
-                </Button>
-              </div>
-            </div>
+            <AddLesson
+              visible={visible}
+              setVisible={setVisible}
+              windowSize={windowSize}
+              slug={slug}
+              course={course}
+              setCourse={setCourse}
+            />
           </div>
         )}
       </div>
     </InstructorRoute>
   )
+}
+
+export async function getServerSideProps(context) {
+  const { data } = await axios(`${process.env.API}/course/${context.query.slug}`)
+  return {
+    props: {
+      data,
+    },
+  }
 }
 
 export default CourseView

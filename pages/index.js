@@ -1,11 +1,10 @@
 import axios from 'axios'
 import CourseCard from '../components/cards/CourseCard.js'
-
+import Banner from '../components/layout/Banner.js'
 const Index = ({ courses }) => {
-
   return (
     <>
-      <h1 className='jumbotron text-center bg-primary w-100'>Online School</h1>
+      <Banner title='Online School' />
       <div className='container-fluid'>
         <div className='row'>
           {courses.map((course) => (

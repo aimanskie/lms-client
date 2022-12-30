@@ -5,6 +5,7 @@ import CourseCreateForm from '../../../components/forms/CourseCreateForm.js'
 import Resizer from 'react-image-file-resizer'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/router'
+import Banner from '../../../components/layout/Banner'
 
 const CourseCreate = () => {
   const [values, setValues] = useState({
@@ -79,7 +80,7 @@ const CourseCreate = () => {
 
   return (
     <InstructorRoute>
-      <h1 className='jumbotron text-center square'>Create Course</h1>
+      <Banner title='Create Course' />
       <div className='pt-3 pb-3'>
         <CourseCreateForm
           handleSubmit={handleSubmit}

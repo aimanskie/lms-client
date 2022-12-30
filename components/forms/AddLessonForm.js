@@ -1,29 +1,10 @@
 import { useState } from 'react'
-import dynamic from 'next/dynamic'
-import 'react-quill/dist/quill.snow.css'
-import { Button, Progress, Select, Input, Form } from 'antd'
-import { CloseCircleFilled } from '@ant-design/icons'
+import QuillEditor from '../layout/QuillToolBar'
+import { Button, Progress, Input } from 'antd'
 import { toast } from 'react-toastify'
 import axios from 'axios'
-
-const QuillNoSSRWrapper = dynamic(import('react-quill'), {
-  ssr: false,
-  loading: () => <p>Loading ...</p>,
-})
-
-const modules = {
-  toolbar: [
-    [{ header: '1' }, { header: '2' }, { header: '3' }, { font: [] }],
-    [{ size: [] }],
-    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-    [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-    ['link', 'image'],
-    ['clean'],
-  ],
-  clipboard: {
-    matchVisual: false,
-  },
-}
+import Banner from '../layout/Banner'
+import SelectMedia from '../layout/SelectMedia'
 
 const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
   const [video, setVideo] = useState({ video: undefined, url: undefined })
@@ -39,6 +20,16 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
 
+  const reset = () => {
+    setValues({ video: { Location: undefined }, pdf: { Location: undefined } })
+    setContent('')
+    setTitle('')
+    setUploading(false)
+    setProgress(0)
+    setUploadButtonText('Upload Video')
+    setUploadButtonPdf('Upload Pdf')
+  }
+
   const handleAddLesson = async (e) => {
     e.preventDefault()
     try {
@@ -48,13 +39,7 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
         video: values.video,
         pdf: values.pdf,
       })
-      setValues({ video: { Location: undefined }, pdf: { Location: undefined } })
-      setContent('')
-      setTitle('')
-      setUploading(false)
-      setProgress(0)
-      setUploadButtonText('Upload Video')
-      setUploadButtonPdf('Upload Pdf')
+      reset()
       setCourse(data)
       toast.success('Lesson added')
       setVisible(false)
@@ -151,132 +136,59 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
       toast.error('Pdf remove failed')
     }
   }
+
   return (
-    <div className='container pt-3'>
-      <form>
-        <input
-          type='text'
-          className='form-control square'
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder='Title'
-          required
-          value={title}
-        />
-        <div>
-          <QuillNoSSRWrapper
-            modules={modules}
-            onChange={(e) => setContent(e)}
-            theme='snow'
-            style={
-              windowSize.height > 1200
-                ? { height: '50vh', marginBottom: '10px' }
-                : windowSize.height > 855
-                ? { height: '40vh', marginBottom: '10px' }
-                : windowSize.height > 680
-                ? { height: '30vh', marginBottom: '10px' }
-                : { height: '10vh', marginBottom: '10px' }
-            }
-            value={content}
-          />
-        </div>
+    <>
+      <Banner title='Add Lessons' small='small' />
+      <div className='container pt-3'>
+        <Input size='large' onChange={(e) => setTitle(e.target.value)} placeholder='Title' required value={title} />
+        <QuillEditor windowSize={windowSize} content={content} setContent={setContent} />
         <div className='justify-content-center pt-5'>
-          <Select
-            placeholder='Upload Video'
-            style={{
-              width: '100%',
-              marginTop: '10px',
-              textAlign: 'center',
-            }}
-            onChange={handleOption}
-            options={[
-              {
-                value: true,
-                label: 'video upload',
-              },
-              {
-                value: false,
-                label: 'url',
-              },
-            ]}
+          <SelectMedia
+            placeholderSelect='Upload Video'
+            placeholderURL='URL of Video'
+            labelMedia='upload video file'
+            labelURL='embed video url'
+            handleSelect={handleOption}
+            media={video}
+            textBtn={uploadButtonText}
+            handleOnChange={handleVideo}
+            handleRemove={handleVideoRemove}
+            uploading={uploading}
+            values={values}
+            handleURL={handleURL}
           />
-          {video?.video && (
-            <label className='btn btn-dark btn-block text-center'>
-              {uploadButtonText}
-              <Input onChange={handleVideo} type='file' accept='video/*' hidden />
-              {!uploading && values?.video?.Location && (
-                <Button style={{ backgroundColor: 'transparent', border: 'none' }} title='remove'>
-                  <span onClick={handleVideoRemove}>
-                    <CloseCircleFilled className='text-danger d-flex float-right' />
-                  </span>
-                </Button>
-              )}
-            </label>
-          )}
-          {video?.url && (
-            <Input
-              placeholder='Vimeo, Youtube links'
-              onChange={handleURL}
-              type='text'
-              style={{ width: '100%', textAlign: 'center', marginTop: 1, padding: 3 }}
-              value={values.video.Location}
-            />
-          )}
-          <Select
-            placeholder='Upload Pdf'
-            style={{
-              width: '100%',
-              textAlign: 'center',
-              marginTop: '5px',
-            }}
-            onChange={handleOptionPdf}
-            options={[
-              {
-                value: true,
-                label: 'pdf upload',
-              },
-              {
-                value: false,
-                label: 'url',
-              },
-            ]}
+          <SelectMedia
+            placeholderSelect='Upload Pdf'
+            placeholderURL='URL of Pdf'
+            labelMedia='upload pdf file'
+            labelURL='embed pdf url'
+            handleSelect={handleOptionPdf}
+            media={pdfFile}
+            textBtn={uploadPdfText}
+            handleOnChange={uploadPdf}
+            handleRemove={removePdf}
+            uploading={uploading}
+            values={values}
+            handleURL={handleURLPdf}
           />
-          {pdfFile?.url && (
-            <Input
-              placeholder='PDF Url'
-              onChange={handleURLPdf}
-              type='text'
-              style={{ textAlign: 'center', marginTop: 5, padding: 5 }}
-              value={values.pdf.Location}
-            />
-          )}
-          {pdfFile?.pdf && (
-            <label className='btn btn-dark btn-block text-center'>
-              {uploadPdfText}
-              <Input onChange={uploadPdf} type='file' accept='application/pdf' hidden />
-              {!uploading && values?.pdf?.Location && (
-                <Button style={{ backgroundColor: 'transparent', border: 'none' }} title='remove'>
-                  <span onClick={removePdf}>
-                    <CloseCircleFilled className='text-danger d-flex float-right' />
-                  </span>
-                </Button>
-              )}
-            </label>
-          )}
         </div>
         {progress > 0 && <Progress className='d-flex justify-content-center pt-2' percent={progress} steps={10} />}
-        <Button
-          onClick={handleAddLesson}
-          className='mt-1'
-          size='large'
-          type='primary'
-          loading={uploading}
-          shape='round'
-          style={{ width: '86%', position: 'absolute', bottom: '10px' }}
-        >
+        <Button onClick={handleAddLesson} block className='mt-3' type='primary' loading={uploading} shape='round'>
           Save
         </Button>
-      </form>
-    </div>
+        <Button
+          onClick={() => {
+            setVisible(false)
+            reset()
+          }}
+          block
+          type='dashed'
+        >
+          Cancel
+        </Button>
+      </div>
+    </>
   )
 }
 

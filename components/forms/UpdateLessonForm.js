@@ -3,33 +3,19 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import { Button, Progress, Switch, Input, Select } from 'antd'
 import ReactPlayer from 'react-player'
-import dynamic from 'next/dynamic'
-const QuillNoSSRWrapper = dynamic(import('react-quill'), {
-  ssr: false,
-  loading: () => <p>Loading ...</p>,
-})
-import 'react-quill/dist/quill.snow.css'
+import QuillEditor from '../layout/QuillToolBar'
+import Banner from '../layout/Banner'
+import usePath from '../../utils/path'
+import SelectMedia from '../layout/SelectMedia'
 
-const modules = {
-  toolbar: [
-    [{ header: '1' }, { header: '2' }, { header: '3' }, { font: [] }],
-    [{ size: [] }],
-    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-    [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-    ['link', 'image'],
-    ['clean'],
-  ],
-  clipboard: {
-    matchVisual: false,
-  },
-}
 const UpdateLessonForm = ({ current, setCurrent, setVisible, windowSize, setValues, values, slug }) => {
-  const [uploadVideoButtonText, setUploadVideoButtonText] = useState('Upload Video')
+  // const [uploadVideoButtonText, setUploadVideoButtonText] = useState('Upload Video')
   const [progress, setProgress] = useState(0)
   const [uploading, setUploading] = useState(false)
   const [video, setVideo] = useState({ video: undefined, url: undefined })
   const [hostname, setHostname] = useState(null)
   const [ifFrame, setIfframe] = useState(null)
+  const [pdfFile, setPdfFile] = useState({ pdf: undefined, url: undefined })
 
   const handleUpdateLesson = async (e) => {
     e.preventDefault()
@@ -100,118 +86,47 @@ const UpdateLessonForm = ({ current, setCurrent, setVisible, windowSize, setValu
     ifFrame?.classList.add('edit')
   }
 
+  const handleOptionPdf = (e) => {
+    if (e) return setPdfFile({ pdf: true, url: false })
+    return setPdfFile({ url: true, pdf: false })
+  }
+
+  const handleURLPdf = (e) => {
+    setValues({ ...values, pdf: { Location: e.target.value } })
+  }
   return (
-    <div className='container pt-3'>
-      <form onSubmit={handleUpdateLesson}>
-        <input
-          type='text'
-          className='form-control square'
+    <>
+      <Banner title='Edit Lessons' small='small' />
+      <div className='container pt-3'>
+        <Input
+          size='large'
           onChange={(e) => setCurrent({ ...current, title: e.target.value })}
           value={current.title}
-          autoFocus
           required
         />
-        <QuillNoSSRWrapper
-          modules={modules}
-          onChange={handleContent}
-          theme='snow'
-          style={
-            windowSize.height > 1200
-              ? { height: '50vh', marginBottom: '10px' }
-              : windowSize.height > 855
-              ? { height: '40vh', marginBottom: '10px' }
-              : windowSize.height > 680
-              ? { height: '30vh', marginBottom: '10px' }
-              : { height: '10vh', marginBottom: '10px' }
-          }
-          value={current.content}
+        <QuillEditor windowSize={windowSize} content={current.content} setContent={setCurrent} />
+
+        <SelectMedia
+          placeholderSelect='Upload Video'
+          placeholderURL='URL of Video'
+          labelMedia='upload video file'
+          labelURL='embed video url'
+          handleSelect={handleOption}
+          media={video}
+          // textBtn=''
+          handleOnChange={handleVideo}
+          // handleRemove={handleVideoRemove}
+          uploading={uploading}
+          values={values}
+          handleURL={handleURL}
+          current={current}
+          hostname={hostname}
         />
 
-        <>
-          {!uploading && current?.video?.Location && (
-            <div className='mt-5 pt-5'>
-              {hostname === 'ems-dev.s3.ap-southeast-1.amazonaws.com' ? (
-                <>
-                  {windowSize.height > 1000 ? (
-                    <ReactPlayer url={current.video.Location} width='410px' height='240px' controls />
-                  ) : (
-                    <ReactPlayer url={current.video.Location} width='270px' height='150px' controls />
-                  )}
-                </>
-              ) : (
-                <ReactPlayer url={current.video.Location} controls onReady={changeSizeYouTube} />
-              )}
-            </div>
-          )}
-
-          <div style={{ margin: 0 }} className='beforeyoutube'>
-            {current?.video?.Location ? (
-              <>
-                {hostname === 'ems-dev.s3.ap-southeast-1.amazonaws.com' ? (
-                  <label className='btn btn-dark btn-block text-left mt-3'>
-                    {uploadVideoButtonText}
-                    <input onChange={handleVideo} type='file' accept='video/*' hidden />
-                  </label>
-                ) : (
-                  <Input
-                    placeholder='Vimeo, Youtube links'
-                    onChange={handleURL}
-                    type='text'
-                    value={current?.video?.Location}
-                    className='mt-2'
-                  />
-                )}
-              </>
-            ) : (
-              <>
-                <div className='pt-5 mt-5'>
-                  <Select
-                    placeholder='Upload Video'
-                    style={{
-                      width: '100%',
-                      marginTop: '10px',
-                      textAlign: 'center',
-                    }}
-                    onChange={handleOption}
-                    options={[
-                      {
-                        value: true,
-                        label: 'video upload',
-                      },
-                      {
-                        value: false,
-                        label: 'url',
-                      },
-                    ]}
-                  />
-                  {video.video && (
-                    <label className='btn btn-dark btn-block text-left mt-2'>
-                      {uploadVideoButtonText}
-                      <input onChange={handleVideo} type='file' accept='video/*' hidden />
-                    </label>
-                  )}
-                  {video.url && (
-                    <Input
-                      placeholder='Vimeo, Youtube links'
-                      onChange={handleURL}
-                      type='text'
-                      style={{ width: '100%', textAlign: 'center' }}
-                      value={current?.video?.Location}
-                      className='mt-2'
-                    />
-                  )}
-                </div>
-              </>
-            )}
-          </div>
-        </>
-
         {progress > 0 && <Progress className='d-flex justify-content-center pt-2' percent={progress} steps={10} />}
-
         <div className='d-flex justify-content-between'>
           {current?.video?.Location && (
             <>
-              {' '}
               <span className='pt-3 badge'>Preview</span>
               <Switch
                 className='float-right mt-2'
@@ -221,22 +136,31 @@ const UpdateLessonForm = ({ current, setCurrent, setVisible, windowSize, setValu
                 onChange={(v) => setCurrent({ ...current, free_preview: v })}
               />
             </>
-          )}{' '}
+          )}
         </div>
-
         <Button
           onClick={handleUpdateLesson}
-          className='col mt-3'
-          size='large'
+          block
+          className='mt-3'
+          // size='large'
           type='primary'
           loading={uploading}
           shape='round'
-          style={{ width: '86%', position: 'absolute', bottom: '10px' }}
+          // style={{ width: '86%', position: 'absolute', bottom: '10px' }}
         >
           Save
         </Button>
-      </form>
-    </div>
+        <Button
+          onClick={() => {
+            setVisible(false)
+          }}
+          block
+          type='dashed'
+        >
+          Cancel
+        </Button>
+      </div>
+    </>
   )
 }
 

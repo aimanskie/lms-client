@@ -1,18 +1,22 @@
+import dynamic from 'next/dynamic.js'
 import { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
-import InstructorRoute from '../../../../components/routes/InstructorRoute.js'
+const InstructorRoute = dynamic(() => import('../../../../components/routes/InstructorRoute.js'), {
+  loading: () => 'Loading...',
+})
 import CourseCreateForm from '../../../../components/forms/CourseCreateForm.js'
 import Resizer from 'react-image-file-resizer'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/router'
-import { List, Avatar, Modal } from 'antd'
-import { DeleteOutlined } from '@ant-design/icons'
+import { List, Modal } from 'antd'
 import UpdateLessonForm from '../../../../components/forms/UpdateLessonForm.js'
 import { Context } from '../../../../context/index.js'
+import Banner from '../../../../components/layout/Banner.js'
+import Info from '../../../../components/layout/Information.js'
+import ListEditLessons from '../../../../components/layout/ListEditLessons.js'
+import Back from '../../../../components/layout/Back.js'
 
-const { Item } = List
-
-const CourseEdit = () => {
+const CourseEdit = ({ courses }) => {
   const [values, setValues] = useState({
     name: '',
     description: '',
@@ -33,14 +37,9 @@ const CourseEdit = () => {
   const { windowSize } = useContext(Context)
 
   useEffect(() => {
-    loadCourse()
-  }, [slug])
-
-  const loadCourse = async () => {
-    const { data } = await axios.get(`/api/course/${slug}`)
-    if (data) setValues(data)
-    if (data?.image) setImage(data.image)
-  }
+    setValues(courses)
+    setImage(courses.image)
+  }, [])
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value })
@@ -130,8 +129,9 @@ const CourseEdit = () => {
 
   return (
     <InstructorRoute>
-      <h1 className='jumbotron text-center square'>Update Course</h1>
-      <div className='pt-3 pb-3'>
+      <Banner title='Updated Course' />
+      <Back />
+      <div className='pt-2 pb-2'>
         <CourseCreateForm
           handleSubmit={handleSubmit}
           handleImageRemove={handleImageRemove}
@@ -147,28 +147,22 @@ const CourseEdit = () => {
       <hr />
       <div className='row pb-5'>
         <div className='col lesson-list'>
-          <h4>{values && values.lessons && values.lessons.length} Lessons</h4>
-          <List>
-            <Item>Drag and drop to arrange the lessons</Item>
-            <Item>Press on the lessons to edit</Item>
-          </List>
+          <h4>{values?.lessons?.length} Lessons</h4>
+          <Info message='Edit the lessons or Delete' desc='And rearrange the lessons by drag and drop' />
           <List
             onDragOver={(e) => e.preventDefault()}
             itemLayout='horizontal'
-            dataSource={values && values.lessons}
+            dataSource={values?.lessons}
             renderItem={(item, index) => (
-              <Item draggable onDragStart={(e) => handleDrag(e, index)} onDrop={(e) => handleDrop(e, index)}>
-                <Item.Meta
-                  onClick={() => {
-                    setVisible(true)
-                    setCurrent(item)
-                  }}
-                  avatar={<Avatar>{index + 1}</Avatar>}
-                  title={item.title}
-                  style={{ cursor: 'pointer' }}
-                ></Item.Meta>
-                <DeleteOutlined onClick={() => handleDelete(index)} className='text-danger float-right' />
-              </Item>
+              <ListEditLessons
+                item={item}
+                index={index}
+                setCurrent={setCurrent}
+                setVisible={setVisible}
+                handleDelete={handleDelete}
+                handleDrag={handleDrag}
+                handleDrop={handleDrop}
+              />
             )}
           ></List>
         </div>
@@ -181,6 +175,7 @@ const CourseEdit = () => {
         onCancel={() => setVisible(false)}
         footer={null}
         bodyStyle={{ height: '90vh' }}
+        width={windowSize.width}
       >
         <UpdateLessonForm
           current={current}
@@ -194,6 +189,15 @@ const CourseEdit = () => {
       </Modal>
     </InstructorRoute>
   )
+}
+
+export async function getServerSideProps(context) {
+  const { data } = await axios(`${process.env.API}/course/${context.query.slug}`)
+  return {
+    props: {
+      courses: data,
+    },
+  }
 }
 
 export default CourseEdit

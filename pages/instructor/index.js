@@ -4,7 +4,8 @@ import InstructorRoute from '../../components/routes/InstructorRoute.js'
 import { Avatar, Tooltip } from 'antd'
 import Link from 'next/link'
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons'
-
+import Banner from '../../components/layout/Banner.js'
+import CreatedCourseList from '../../components/layout/CreatedCourseList.js'
 const InstructorIndex = () => {
   const [courses, setCourses] = useState([])
 
@@ -21,50 +22,12 @@ const InstructorIndex = () => {
 
   return (
     <InstructorRoute>
-      <h1 className='jumbotron text-center square'>Instructor Dashboard</h1>
-      {courses &&
-        courses.map((course, idx) => (
-          <div key={idx}>
-            <div className='media pt-2'>
-              <Avatar size={80} src={course.image ? course.image.Location : '/course.png'} />
-
-              <div className='media-body pl-2'>
-                <div className='row'>
-                  <div className='col'>
-                    <Link href={`/instructor/course/view/${course.slug}`} className='pointer mt-2 text-primary'>
-                      <h5 className='pt-2'>{course.name}</h5>
-                    </Link>
-                    <p style={{ marginTop: '-10px' }}>{course.lessons.length} Lessons</p>
-
-                    {course.lessons.length < 2 ? (
-                      <p style={myStyle} className='text-warning'>
-                        At least 2 lessons are required to publish a course
-                      </p>
-                    ) : course.published ? (
-                      <p style={myStyle} className='text-success'>
-                        Your course is live
-                      </p>
-                    ) : (
-                      <p style={myStyle} className='text-success'>
-                        Your course is ready to be published
-                      </p>
-                    )}
-                  </div>
-                </div>
-                <div className='col mt-2'></div>
-              </div>
-              {course.published ? (
-                <Tooltip title='Published'>
-                  <CheckCircleOutlined className='h5 pointer text-success align-self-center mr-5' />
-                </Tooltip>
-              ) : (
-                <Tooltip title='Unpublished'>
-                  <CloseCircleOutlined className='h5 pointer text-warning align-self-center mr-5' />
-                </Tooltip>
-              )}
-            </div>
-          </div>
-        ))}
+      <Banner title='Instructor' />
+      {courses?.map((course, idx) => (
+        <div key={idx}>
+          <CreatedCourseList course={course} myStyle={myStyle} />
+        </div>
+      ))}
     </InstructorRoute>
   )
 }
