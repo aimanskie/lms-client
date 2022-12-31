@@ -1,4 +1,5 @@
 import { Select, Button, Avatar, Badge } from 'antd'
+import Banner from '../layout/Banner'
 import Price from '../layout/PriceRange'
 const { Option } = Select
 
@@ -12,9 +13,11 @@ const CourseCreateForm = ({
   uploadButtonText,
   handleImageRemove = (f) => f,
   editPage = false,
+  setEditCourseVisible,
 }) => {
   return (
     <>
+      {editPage && <Banner title='Edit Course' small='small' />}
       {values && (
         <form onSubmit={handleSubmit}>
           <div className='form-group'>
@@ -92,7 +95,16 @@ const CourseCreateForm = ({
           </div>
 
           <div className='row'>
-            <div className='col'>
+            <div className='col' style={{ textAlign: 'center' }}>
+              <Button
+                onClick={() => setEditCourseVisible(false)}
+                type='default'
+                size='large'
+                shape='round'
+                style={{ marginRight: 5 }}
+              >
+                Cancel
+              </Button>
               <Button
                 onClick={handleSubmit}
                 disabled={values.loading || values.uploading}
@@ -101,6 +113,7 @@ const CourseCreateForm = ({
                 type='primary'
                 size='large'
                 shape='round'
+                // style={{ textAlign: 'center', justifyContent: 'center' }}
               >
                 {values.loading ? 'Saving...' : 'Save & Continue'}
               </Button>

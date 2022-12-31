@@ -13,7 +13,7 @@ import UpdateLessonForm from '../../../../components/forms/UpdateLessonForm.js'
 import { Context } from '../../../../context/index.js'
 import Banner from '../../../../components/layout/Banner.js'
 import Info from '../../../../components/layout/Information.js'
-import ListEditLessons from '../../../../components/layout/ListEditLessons.js'
+import ListLessons from '../../../../components/layout/ListEditLessons.js'
 import Back from '../../../../components/layout/Back.js'
 
 const CourseEdit = ({ courses }) => {
@@ -154,7 +154,7 @@ const CourseEdit = ({ courses }) => {
             itemLayout='horizontal'
             dataSource={values?.lessons}
             renderItem={(item, index) => (
-              <ListEditLessons
+              <ListLessons
                 item={item}
                 index={index}
                 setCurrent={setCurrent}

@@ -6,12 +6,12 @@ import ReactMarkdown from 'react-markdown'
 import { toast } from 'react-toastify'
 import { Context } from '../../../../context/index.js'
 import Back from '../../../../components/layout/Back.js'
-import CreatedCourseList from '../../../../components/layout/CreatedCourseList.js'
-import AddLesson from '../../../../components/layout/AddLesson.js'
+import CreatedCourseAvatar from '../../../../components/layout/CreatedCourseList.js'
+import CourseLessonList from '../../../../components/layout/CourseLessonList.js.js'
+import Banner from '../../../../components/layout/Banner.js'
 
 const CourseView = ({ data }) => {
   const [course, setCourse] = useState({})
-  const [visible, setVisible] = useState(false)
   const { windowSize } = useContext(Context)
   const router = useRouter()
   const { slug } = router.query
@@ -49,22 +49,21 @@ const CourseView = ({ data }) => {
   return (
     <InstructorRoute>
       <Back />
+      <Banner title='Course' />
       <div className='contianer-fluid pt-3'>
         {course && (
           <div className='container-fluid pt-1'>
-            <CreatedCourseList course={course} handlePublish={handlePublish} handleUnpublish={handleUnpublish} />
-            <hr />
-            <h2 className='col text-center'>
-              <ReactMarkdown children={course.description} />
-            </h2>
-            <AddLesson
-              visible={visible}
-              setVisible={setVisible}
+            <CreatedCourseAvatar
               windowSize={windowSize}
-              slug={slug}
               course={course}
+              handlePublish={handlePublish}
+              handleUnpublish={handleUnpublish}
               setCourse={setCourse}
             />
+            <hr />
+            <h3 className='col text-center'>{course.name}</h3>
+            <h5 className='col text-center'>{course.description}</h5>
+            <CourseLessonList windowSize={windowSize} slug={slug} course={course} setCourse={setCourse} />
           </div>
         )}
       </div>
