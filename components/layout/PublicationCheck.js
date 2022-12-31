@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { Modal, Tooltip } from 'antd'
-import { QuestionOutlined, CheckOutlined, EditOutlined } from '@ant-design/icons'
+import { QuestionOutlined, CheckOutlined, EditOutlined, CloseOutlined } from '@ant-design/icons'
 import CourseCreateForm from '../forms/CourseCreateForm'
 import { useState, useEffect } from 'react'
 import { toast } from 'react-toastify'

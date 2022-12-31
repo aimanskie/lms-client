@@ -6,7 +6,7 @@ import axios from 'axios'
 import Banner from '../layout/Banner'
 import SelectMedia from '../layout/SelectMedia'
 
-const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
+const AddLessonForm = ({ slug, course, setCourse, visible, setVisible, windowSize, setOpen, setCurrent, current }) => {
   const [video, setVideo] = useState({ video: undefined, url: undefined })
   const [pdfFile, setPdfFile] = useState({ pdf: undefined, url: undefined })
   const [uploading, setUploading] = useState(false)
@@ -19,6 +19,13 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
   })
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
+  const [hostname, setHostname] = useState(null)
+
+  useEffect(() => {
+    if (!current?.video?.Location) return
+    const { hostname } = new URL(current?.video?.Location)
+    setHostname(hostname)
+  }, [current?.video?.Location])
 
   const reset = () => {
     setValues({ video: { Location: undefined }, pdf: { Location: undefined } })
@@ -51,6 +58,9 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
 
   const handleVideo = async (e) => {
     try {
+      if (current?.video?.Location) {
+        const res = await axios.post(`/api/course/video-remove/${values.instructor._id}`, current.video)
+      }
       const file = e.target.files[0]
       setUploadButtonText(file.name)
       setUploading(true)
@@ -139,10 +149,20 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
 
   return (
     <>
-      <Banner title='Add Lessons' small='small' />
+      <Banner title={visible.addLesson ? 'Add Lessons' : 'Edit Lessons'} small='small' />
       <div className='container pt-3'>
-        <Input size='large' onChange={(e) => setTitle(e.target.value)} placeholder='Title' required value={title} />
-        <QuillEditor windowSize={windowSize} content={content} setContent={setContent} />
+        <Input
+          size='large'
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder='Title'
+          required
+          value={visible.addLesson ? title : course.title}
+        />
+        <QuillEditor
+          windowSize={windowSize}
+          content={visible.addLesson ? content : course.content}
+          setContent={setContent}
+        />
         <div className='justify-content-center pt-5'>
           <SelectMedia
             placeholderSelect='Upload Video'
@@ -157,8 +177,11 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
             uploading={uploading}
             values={values}
             handleURL={handleURL}
+            current={current}
+            hostname={hostname}
+            
           />
-          <SelectMedia
+          {/* <SelectMedia
             placeholderSelect='Upload Pdf'
             placeholderURL='URL of Pdf'
             labelMedia='upload pdf file'
@@ -171,7 +194,7 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
             uploading={uploading}
             values={values}
             handleURL={handleURLPdf}
-          />
+          /> */}
         </div>
         {progress > 0 && <Progress className='d-flex justify-content-center pt-2' percent={progress} steps={10} />}
         <Button onClick={handleAddLesson} block className='mt-3' type='primary' loading={uploading} shape='round'>
@@ -179,7 +202,8 @@ const AddLessonForm = ({ slug, course, setCourse, setVisible, windowSize }) => {
         </Button>
         <Button
           onClick={() => {
-            setVisible(false)
+            setVisible({ addLesson: false, editLesson: false })
+            setOpen(false)
             reset()
           }}
           block

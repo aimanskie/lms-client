@@ -61,8 +61,12 @@ const CourseView = ({ data }) => {
               setCourse={setCourse}
             />
             <hr />
-            <h3 className='col text-center'>{course.name}</h3>
-            <h5 className='col text-center'>{course.description}</h5>
+            <div className='text-center'>
+              <h3>{course.name}</h3>
+              <h5>{course.description}</h5>
+              <h5>{course.category}</h5>
+              <h4>{course?.lessons?.length} Lessons</h4>
+            </div>
             <CourseLessonList windowSize={windowSize} slug={slug} course={course} setCourse={setCourse} />
           </div>
         )}
