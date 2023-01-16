@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons'
 import Banner from '../../components/layout/Banner.js'
 import CreatedCourseList from '../../components/layout/CreatedCourseList.js'
+
 const InstructorIndex = () => {
   const [courses, setCourses] = useState([])
 

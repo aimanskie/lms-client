@@ -18,7 +18,8 @@ const CourseLessonList = ({ windowSize, slug, course, setCourse }) => {
   const handleDelete = async (index) => {
     const answer = window.confirm('Are you sure you want to delete?')
     if (!answer) return
-    let allLessons = values.lessons
+    console.log(course)
+    let allLessons = course.lessons
     const removed = allLessons.splice(index, 1)
     // setValues({ ...values, lessons: allLessons })
     setCourse({ ...course, lessons: allLessons })
@@ -88,7 +89,8 @@ const CourseLessonList = ({ windowSize, slug, course, setCourse }) => {
               handleDrag={handleDrag}
               handleDrop={handleDrop}
               setOpen={setOpen}
-              visible={visible}
+              // visible={visible}
+              // course={course}
             />
           )}
         ></List>
@@ -126,8 +128,10 @@ const CourseLessonList = ({ windowSize, slug, course, setCourse }) => {
           setVisible={setVisible}
           windowSize={windowSize}
           setOpen={setOpen}
-          setCurrent={setCurrent}
+          // setCurrent={setCurrent}
           current={current}
+          courses={course}
+          setCourses={setCourse}
         />
       </Modal>
     </>

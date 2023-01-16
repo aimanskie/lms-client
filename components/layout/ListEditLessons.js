@@ -13,6 +13,8 @@ const ListLessons = ({
   handleDrop = null,
   handleDelete = null,
   setOpen,
+  // course,
+  // visible
 }) => {
   return (
     <>

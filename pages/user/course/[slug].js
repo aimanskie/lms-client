@@ -148,11 +148,11 @@ const SingleCourse = () => {
     setScaleNumber((currentScale) => currentScale - 0.25)
   }
 
-  useEffect(() => {
-    return () => {
-      document.addEventListener('load', handleContent)
-    }
-  }, [])
+  // useEffect(() => {
+  //   return () => {
+  //     document.addEventListener('load', handleContent)
+  //   }
+  // }, [])
 
   return (
     <StudentRoute>

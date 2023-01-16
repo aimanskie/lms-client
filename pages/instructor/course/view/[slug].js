@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 import InstructorRoute from '../../../../components/routes/InstructorRoute.js'
 import axios from 'axios'
-import ReactMarkdown from 'react-markdown'
+// import ReactMarkdown from 'react-markdown'
 import { toast } from 'react-toastify'
 import { Context } from '../../../../context/index.js'
 import Back from '../../../../components/layout/Back.js'
@@ -12,12 +12,14 @@ import Banner from '../../../../components/layout/Banner.js'
 
 const CourseView = ({ data }) => {
   const [course, setCourse] = useState({})
+  // const [image,setImage] = useState({})
   const { windowSize } = useContext(Context)
   const router = useRouter()
   const { slug } = router.query
 
   useEffect(() => {
     setCourse(data)
+    // setImage(data.image)
   }, [])
 
   const handlePublish = async (e, courseId) => {
@@ -59,6 +61,8 @@ const CourseView = ({ data }) => {
               handlePublish={handlePublish}
               handleUnpublish={handleUnpublish}
               setCourse={setCourse}
+              // image={image}
+              // setImage={setImage}
             />
             <hr />
             <div className='text-center'>

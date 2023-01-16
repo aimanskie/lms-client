@@ -5,7 +5,7 @@ import usePath from '../../utils/path'
 import { useRouter } from 'next/router'
 import { IconPublication, MessagePublication } from './ConfirmPublicationMsg'
 import { PublicationCheck } from './PublicationCheck'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const CreatedCourseAvatar = ({
   windowSize,
@@ -14,12 +14,19 @@ const CreatedCourseAvatar = ({
   handlePublish = null,
   handleUnpublish = null,
   setCourse,
+  // image,
 }) => {
   // const [editCourseVis, setEditCourseVis] = useState(false)
+  // const [image, setImage] = useState(course.image)
+
+  // useEffect(() => {
+  //   setImage(course.image)
+  // }, [course])
+  // course.image = image
 
   return (
     <div className='media'>
-      <Avatar size={80} src={course?.image ? course.image.Location : '/course.png'} />
+      <Avatar size={80} src={course.image ? course.image.Location : '/course.png'} />
       {usePath(3) !== 'view' ? (
         <>
           <div className='row'>

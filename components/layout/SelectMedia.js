@@ -17,9 +17,10 @@ const SelectMedia = ({
   handleURL,
   current,
   hostname,
+  visible,
 }) => {
-  const editPath = usePath(3)
-
+  // const editPath = usePath(3)
+  console.log(visible)
   return (
     <>
       <Select
@@ -63,7 +64,13 @@ const SelectMedia = ({
           value={values?.video?.Location || values?.pdf?.Location}
         />
       )}
-      <MediaPlayer uploading={uploading} current={current} hostname={hostname} />
+      <MediaPlayer
+        uploading={uploading}
+        current={current}
+        hostname={hostname}
+        visible={visible}
+        // values={values}
+      />
     </>
   )
 }
@@ -132,26 +139,30 @@ const SelectMedia = ({
 //  </>
 //
 
-const MediaPlayer = ({ uploading, current, hostname }) => {
+const MediaPlayer = ({ uploading, current, hostname, visible }) => {
+  // console.log(values)
+  console.log(visible.addLesson)
   return (
     <>
-      {!uploading && current?.video?.Location && (
-        <div className='mt-5 pt-5'>
-          {hostname === 'ems-dev.s3.ap-southeast-1.amazonaws.com' ? (
-            <>
-              {current.video.Location}
-              {/* {windowSize.height > 1000 ? (
+      {visible.addLesson
+        ? ''
+        : current?.video?.Location && (
+            <div className='mt-5 pt-5'>
+              {hostname === 'ems-dev.s3.ap-southeast-1.amazonaws.com' ? (
+                <>
+                  {current.video.Location}
+                  {/* {windowSize.height > 1000 ? (
                 <ReactPlayer url={current.video.Location} width='410px' height='240px' controls />
               ) : (
                 <ReactPlayer url={current.video.Location} width='270px' height='150px' controls />
               )} */}
-            </>
-          ) : (
-            <div>{current.video.Location}</div>
-            // <ReactPlayer url={current.video.Location} controls onReady={changeSizeYouTube} />
+                </>
+              ) : (
+                <div>{current.video.Location}</div>
+                // <ReactPlayer url={current.video.Location} controls onReady={changeSizeYouTube} />
+              )}
+            </div>
           )}
-        </div>
-      )}
     </>
   )
 }

@@ -5,10 +5,11 @@ import CourseCreateForm from '../forms/CourseCreateForm'
 import { useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
 import axios from 'axios'
+import Resizer from 'react-image-file-resizer'
 
 export const PublicationCheck = ({ windowSize, course, handlePublish, handleUnpublish, setCourse }) => {
   const [editCourseVisible, setEditCourseVisible] = useState(false)
-  const [image, setImage] = useState({})
+  // const [image, setImage] = useState({})
   const [uploadButtonText, setUploadButtonText] = useState('Upload Image')
   const [preview, setPreview] = useState('')
   // const [values, setValues] = useState({
@@ -24,10 +25,10 @@ export const PublicationCheck = ({ windowSize, course, handlePublish, handleUnpu
   const router = useRouter()
   const { slug } = router.query
 
-  useEffect(() => {
-    // setValues(course)
-    setImage(course.image)
-  }, [])
+  // useEffect(() => {
+  //   // setValues(course)
+  //   setImage(course.image)
+  // }, [])
 
   const handleImage = (e) => {
     let file = e.target.files[0]
@@ -41,9 +42,9 @@ export const PublicationCheck = ({ windowSize, course, handlePublish, handleUnpu
         let { data } = await axios.post('/api/course/upload-image', {
           image: uri,
         })
-        setImage(data)
+        // setImage(data)
         // setValues({ ...values, loading: false })
-        setCourse({ ...course, loading: false })
+        setCourse({ ...course, image: data, loading: false })
       } catch (err) {
         console.log(err)
         // setValues({ ...values, loading: false })
@@ -58,10 +59,13 @@ export const PublicationCheck = ({ windowSize, course, handlePublish, handleUnpu
     try {
       const { data } = await axios.put(`/api/course/${slug}`, {
         ...course,
-        image,
+        // image,
       })
       toast.success('Course updated!')
-      setEditCourseVisible(false)
+      setTimeout(() => {
+        setEditCourseVisible(false)
+        // router.reload()
+      }, 2000)
     } catch (err) {
       console.log(err)
       toast.error(err.response.data)
@@ -73,7 +77,7 @@ export const PublicationCheck = ({ windowSize, course, handlePublish, handleUnpu
       // setValues({ ...values, loading: true })
       setCourse({ ...course, loading: true })
       const res = await axios.post('/api/course/remove-image', { image })
-      setImage({})
+      // setImage({})
       setPreview('')
       setUploadButtonText('Upload Image')
       // setValues({ ...values, loading: false })
@@ -103,7 +107,7 @@ export const PublicationCheck = ({ windowSize, course, handlePublish, handleUnpu
 
         {course?.lessons?.length < 2 ? (
           <Tooltip title='Min 2 lessons required to publish'>
-            <QuestionOutlined className='h5 pointer text-danger' size={large} />
+            <QuestionOutlined className='h5 pointer text-danger' size={'large'} />
           </Tooltip>
         ) : course.published ? (
           <Tooltip title='Unpublish'>
